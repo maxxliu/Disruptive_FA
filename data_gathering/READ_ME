@@ -1,0 +1,4 @@
+Folder containing files related to data scraping
+
+financials: Files for pulling financial data
+comparable_tags: Files for finding tags associated with stocks
