@@ -4,6 +4,8 @@
 
 import bs4
 import requests
+from collections import OrderedDict
+import csv
 
 
 '''
@@ -85,15 +87,16 @@ def collect_fin_data(ticker):
     '''
     takes a ticker and collect financial data relating to the ticker
     '''
-    data_dict = {}
+    data_dict = OrderedDict()
     urls = create_urls(ticker)
 
     for pair in urls:
         fin_type = pair[0]
         url = pair[1]
 
-        data_dict[fin_type] = {}
+        data_dict[fin_type] = OrderedDict()
         current_dict = data_dict[fin_type]
+        current_dict['Ticker'] = ticker.upper()
 
         r = requests.get(url)
         html = r.text 
@@ -118,3 +121,28 @@ def collect_fin_data(ticker):
 
 
     return data_dict
+
+
+def create_csv(data_dict):
+    '''
+    convert dictionary into csv file
+    '''
+    data_lst = []
+    for key, d in data_dict.items():
+        for line_item in d.keys():
+            if line_item != 'Ticker':
+                temp_lst = [d['Ticker']]
+                temp_lst.append(key)
+                temp_lst.append(line_item)
+                temp_lst.extend(d[line_item])
+                data_lst.append(temp_lst)
+
+    with open('stock_financials.csv', 'wt') as fin_csv:
+        fin_writer = csv.writer(fin_csv)
+        fin_writer.writerow(['Ticker', 'Statement Type', 'Line Item', 'Year 1', 'Year 2', 'Year 3', 'Year 4'])
+        for row in data_lst:
+            fin_writer.writerow(row)
+
+    return fin_csv
+
+
