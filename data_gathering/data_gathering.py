@@ -74,7 +74,9 @@ def get_dates(tr_tag):
 
     clean_dates = []
     for item in raw_str:
+        item.replace('/', '')
         if item != 'Trend' and len(item) > 0:
+            item.replace('/', '')
             clean_dates.append(item)
 
     dates = clean_dates[1:]
@@ -88,6 +90,7 @@ def collect_fin_data(ticker):
     takes a ticker and collect financial data relating to the ticker
     '''
     data_dict = OrderedDict()
+    date_dict = OrderedDict()
     urls = create_urls(ticker)
 
     for pair in urls:
@@ -110,9 +113,9 @@ def collect_fin_data(ticker):
             if tag.next_sibling == '\n':
                 clean_tags.append(tag)
 
-        date_key, dates = get_dates(clean_tags[0])
-
-        current_dict[date_key] = dates
+        if len(date_dict) == 0:
+            date_key, dates = get_dates(clean_tags[0])
+            date_dict[ticker.upper()] = dates
 
         for tag in clean_tags[1:]:
             key_name, data_vals = clean_text(tag)
@@ -120,7 +123,7 @@ def collect_fin_data(ticker):
                 current_dict[key_name] = data_vals
 
 
-    return data_dict
+    return data_dict, date_dict
 
 
 def create_csv(data_dict):

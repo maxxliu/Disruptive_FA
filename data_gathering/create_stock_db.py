@@ -8,6 +8,45 @@ from collections import OrderedDict
 import sqlite3
 import csv
 
+'''
+I want to have 3 database tables
+
+1. stock financial information
+2. stock period ending information to decide when we need to update
+3. Additional information such as beta, share volume, share price, multiples/ratios, tax rate
+'''
+
+def fin_data_dict(list_of_tickers):
+    stock_fin = OrderedDict()
+    stock_dates = OrderedDict()
+    for stock in list_of_tickers:
+        temp_fin, temp_dates = data_gathering.collect_fin_data(stock)
+        if len(temp_fin['Income Statement']) > 2:
+            stock_fin[stock.upper()] = temp_fin
+            stock_dates[stock.upper()] = temp_dates
+
+    return stock_fin, stock_dates
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def stock_list_csv(list_of_tickers):
     '''

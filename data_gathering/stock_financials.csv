@@ -1,4 +1,3 @@
-ticker,statement_type,line_item,year_1,year_2,year_3,year_4
 AAPL,Income Statement,Period Ending,9/28/2013,9/27/2014,9/26/2015,9/24/2016
 AAPL,Income Statement,Total Revenue,170910000000,182795000000,233715000000,215639000000
 AAPL,Income Statement,Cost of Revenue,106606000000,112258000000,140089000000,131376000000
