@@ -19,6 +19,8 @@ data = {"Period Ending": []
         "Cash Flow": {}
         }
 '''
+
+
 def create_urls(ticker):
     '''
     create link to web page that holds data
@@ -124,6 +126,44 @@ def collect_fin_data(ticker):
 
 
     return data_dict, date_dict
+
+
+def summary_info(ticker):
+    '''
+    Takes a ticker and creates a dictionary of summary information
+    '''
+    summary_d = {}
+
+    ticker = ticker.lower()
+    url = 'http://www.nasdaq.com/symbol/' + ticker
+    r = requests.get(url)
+    html = r.text
+    soup = bs4.BeautifulSoup(html, 'lxml')
+    data_tables = soup.find_all('table')[8].find_all('td')
+
+    keys = []
+    values = []
+    for i, tag in enumerate(data_tables):
+        text = tag.get_text()
+        if i % 2 == 0:
+            text = text.strip('\n\r\t ')
+            text = text.split('\r')
+            keys.append(text[0])
+        else:
+            text = text.strip('$\n\r\xa0% ')
+            text = text.replace('\xa0', '')
+            text = text.replace(',', '')
+            text = text.split('/')
+            if len(text) > 1:
+                text[1] = text[1].strip('$')
+                values.append(text)
+            else:
+                values.append(text[0])
+
+    for i in range(len(keys)):
+        summary_d[keys[i]] = values[i]
+            
+    return summary_d
 
 
 def create_csv(data_dict):
