@@ -1,5 +1,7 @@
 from django.shortcuts import render, HttpResponse
+from django.forms.models import model_to_dict
 from .models import *
+from .helper import *
 from django.core.exceptions import *
 
 # Create your views here.
@@ -15,14 +17,17 @@ def results(request):
 			fin_statement = Fin_Statement.objects.get(ticker = stock)
 			data_date = Data_Date.objects.get(ticker = stock)
 			summary_data = Summary_Data.objects.get(ticker = stock)
+
+			recommended = get_recommended(stock, summary_data)
 			
 			# check for updates on fin_statement and summary_data
 			# use financials to calculate DCF and Buy/Sell/Hold rating
 			# format render dictionary
 
-			return render(request, 'quick_search/results.html', {'stock': [stock.ticker, stock.name],
+			return render(request, 'quick_search/results.html', {'stock': [stock.ticker],
 				'fin_statement': [fin_statement.statement_type],
-				'summary_data': [summary_data.updated, summary_data.previous_close]})		
+				'summary_data': [summary_data.updated, summary_data.previous_close],
+				'recommended': recommended})		
 		except Stock.DoesNotExist:
 			return HttpResponse("<p>error</p>")
 	else:
