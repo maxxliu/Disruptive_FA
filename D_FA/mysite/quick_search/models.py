@@ -10,10 +10,18 @@ class Stock(models.Model):
 	industry = models.CharField(max_length=200)
 
 	def __str__(self):
-		return self.ticker, self.name, self.sector, self. industry
+		return self.ticker
+
+	def __repr__(self):
+		return {
+			'ticker': self.ticker,
+			'name': self.name,
+			'sector': self.sector,
+			'industry': self.industry
+		}
 
 
-class Fin_Statements(models.Model):
+class Fin_Statement(models.Model):
 	ticker = models.ForeignKey(Stock, on_delete=models.CASCADE)
 	statement_type = models.CharField(max_length=200)
 	line_item = models.CharField(max_length=200)
@@ -23,10 +31,9 @@ class Fin_Statements(models.Model):
 	year_4_val = models.BigIntegerField()
 
 	def __str__(self):
-		return self.ticker, self.statement_type, self.line_item, self.year_1_val, self.year_2_val, self.year_3_val, self.year_4_val
+		return self.ticker.ticker
 
-
-class Data_Dates(models.Model):
+class Data_Date(models.Model):
 	ticker = models.ForeignKey(Stock, on_delete=models.CASCADE)
 	year_1 = models.CharField(max_length=200)
 	year_2 = models.CharField(max_length=200)
@@ -34,7 +41,7 @@ class Data_Dates(models.Model):
 	year_4 = models.CharField(max_length=200)
 
 	def __str__(self):
-		return self.ticker, self.year_1, self.year_2, self.year_3, self.year_4
+		return self.ticker.ticker
 
 
 class Summary_Data(models.Model):
@@ -45,3 +52,6 @@ class Summary_Data(models.Model):
 	beta = models.DecimalField(max_digits=5, decimal_places=2)
 	market_cap = models.BigIntegerField()
 	previous_close = models.DecimalField(max_digits=7, decimal_places=2)
+
+	def __str__(self):
+		return self.ticker.ticker

@@ -1,0 +1,11 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+
+{% for row in results %}
+	<p>{{ row }}</p>
+{% endfor %}
+
+{% include "home/includes/snippet.html" %}
+
+{% endblock %}
