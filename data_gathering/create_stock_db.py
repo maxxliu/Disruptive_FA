@@ -27,6 +27,12 @@ def fin_data_dict(list_of_tickers):
 
     return stock_fin, stock_dates
 
+def sum_info_dict(list_of_tickers):
+    summary = {}
+    for stock in list_of_tickers:
+        summary[stock.upper()] = data_gathering.summary_info(stock)
+
+    return summary
 
 
 
