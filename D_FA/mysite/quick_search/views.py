@@ -12,21 +12,29 @@ def index(request):
 def results(request):
 	if request.method == "POST":
 		search = request.POST['textfield']
+	elif request.method == "GET":
+		search = request.GET['textfield']
+
+	if search:
 		try:
 			stock = Stock.objects.get(ticker = search)
-			fin_statement = Fin_Statement.objects.get(ticker = stock)
-			data_date = Data_Date.objects.get(ticker = stock)
+			# format render dict entry for stock
+
 			summary_data = Summary_Data.objects.get(ticker = stock)
+			# check for update on summary data values
+			# format render dict entry for summary data
+
+			data_date = Data_Date.objects.get(ticker = stock)
+			# check for update on fin statemenet values
+
+			fin_statements = Fin_Statement.objects.filter(ticker = stock)	# this a list
+			# calculate DCF and rating from financials list
+			# format render dict entry for financials
 
 			recommended = get_recommended(stock, summary_data)
-			
-			# check for updates on fin_statement and summary_data
-			# use financials to calculate DCF and Buy/Sell/Hold rating
-			# format render dictionary
 
 			return render(request, 'quick_search/results.html', {'stock': [stock.ticker],
-				'fin_statement': [fin_statement.statement_type],
-				'summary_data': [summary_data.updated, summary_data.previous_close],
+				'summary_data': [summary_data.previous_close, summary_data.updated],
 				'recommended': recommended})		
 		except Stock.DoesNotExist:
 			return HttpResponse("<p>error</p>")

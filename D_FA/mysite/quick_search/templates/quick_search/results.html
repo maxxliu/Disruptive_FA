@@ -14,7 +14,9 @@
 		<p>{{line}}</p>
 	{% endfor %}
 	{% for line in recommended %}
-		<p>{{line}}</p>
+		<form action="/quick_search/results/" method="GET"/>
+		<input type="submit" name="textfield" value={{line}}>
+		</form>
 	{% endfor %}
 <p>&nbsp;</p>
 
