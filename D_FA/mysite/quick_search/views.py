@@ -15,9 +15,14 @@ def results(request):
 			fin_statement = Fin_Statement.objects.get(ticker = stock)
 			data_date = Data_Date.objects.get(ticker = stock)
 			summary_data = Summary_Data.objects.get(ticker = stock)
+			
+			# check for updates on fin_statement and summary_data
+			# use financials to calculate DCF and Buy/Sell/Hold rating
+			# format render dictionary
+
 			return render(request, 'quick_search/results.html', {'stock': [stock.ticker, stock.name],
 				'fin_statement': [fin_statement.statement_type],
-				'summary_data': [summary_data.previous_close]})
+				'summary_data': [summary_data.updated, summary_data.previous_close]})		
 		except Stock.DoesNotExist:
 			return HttpResponse("<p>error</p>")
 	else:
