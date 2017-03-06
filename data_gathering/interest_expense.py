@@ -15,14 +15,20 @@ def get_interest_expense(ticker):
         text = year.get_text()
         year_lst.append(text)
 
-    td = tr[23].find_all('td')
-    #a = td[0].find_all('a')[0]
-    #hmm = a.get('data-ref')
-    #print(hmm)
+    expense_years = []
+    for tag in tr:
+        text = tag.get_text()
+        if "Interest Expense" in text:
+            td = tag.find_all('td')
+            div = td[6].find_all('div')[0]
+            string = div.get('data-chart')
+            string = re.search('\[[\w,]+\]', string).group()
+            string = string.replace('null', '"null"')
+            expense_years = ast.literal_eval(string)
+            break
 
-    div = td[6].find_all('div')[0]
-    string = div.get('data-chart')
-    string = re.search('\[[\w,]+\]', string).group()
-    string = string.replace('null', '"null"')
-    expense_years = ast.literal_eval(string)
-    return year_lst, expense_years
+    for i, num in enumerate(expense_years):
+        if num == "null":
+            expense_years[i] = 0
+
+    return year_lst, expense_years[1:]

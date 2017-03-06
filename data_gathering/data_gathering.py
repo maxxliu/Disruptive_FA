@@ -6,6 +6,8 @@ import bs4
 import requests
 from collections import OrderedDict
 import csv
+import ast
+import re
 
 
 '''
@@ -25,7 +27,6 @@ def create_urls(ticker):
     '''
     create link to web page that holds data
     '''
-    ticker = ticker.lower()
     url_p1 = "https://www.nasdaq.com/symbol/"
     url_p2 = "/financials?query="
     rough_url = url_p1 + ticker + url_p2
@@ -87,10 +88,43 @@ def get_dates(tr_tag):
     return clean_dates[0].strip(':'), dates 
 
 
+def get_interest_expense(ticker):
+    ticker = ticker.lower()
+    url = 'http://www.marketwatch.com/investing/stock/{}/financials'.format(ticker)
+    r = requests.get(url)
+    html = r.text
+    soup = bs4.BeautifulSoup(html, 'lxml')
+    year_lst = []
+    tr = soup.find_all('tr')
+    th = tr[0].find_all('th')
+    for year in th[1:-1]:
+        text = year.get_text()
+        year_lst.append(text)
+
+    expense_years = []
+    for tag in tr:
+        text = tag.get_text()
+        if "Interest Expense" in text:
+            td = tag.find_all('td')
+            div = td[6].find_all('div')[0]
+            string = div.get('data-chart')
+            string = re.search('\[[\w,]+\]', string).group()
+            string = string.replace('null', '"null"')
+            expense_years = ast.literal_eval(string)
+            break
+
+    for i, num in enumerate(expense_years):
+        if num == "null":
+            expense_years[i] = 0
+
+    return year_lst, expense_years[1:]
+
+
 def collect_fin_data(ticker):
     '''
     takes a ticker and collect financial data relating to the ticker
     '''
+    ticker = ticker.lower()
     data_dict = OrderedDict()
     date_dict = OrderedDict()
     urls = create_urls(ticker)
@@ -99,16 +133,20 @@ def collect_fin_data(ticker):
         fin_type = pair[0]
         url = pair[1]
 
+        r = requests.get(url)
+        if r.status_code == 404 or r.status_code == 403:
+            return {}, {}
+        html = r.text 
+        soup = bs4.BeautifulSoup(html, "lxml")
+
         data_dict[fin_type] = OrderedDict()
         current_dict = data_dict[fin_type]
         current_dict['Ticker'] = ticker.upper()
 
-        r = requests.get(url)
-        html = r.text 
-        soup = bs4.BeautifulSoup(html, "lxml")
-
         data_loc = soup.find_all('table')[5]
         raw_data = data_loc.find_all('tr')
+        if len(raw_data) <= 1:
+            return {}, {}
 
         clean_tags = []
         for tag in raw_data:
@@ -123,6 +161,10 @@ def collect_fin_data(ticker):
             key_name, data_vals = clean_text(tag)
             if key_name != 0:
                 current_dict[key_name] = data_vals
+
+    if data_dict['Income Statement']['Interest Expense'][-1] == 0:
+        ie = get_interest_expense(ticker)[1]
+        data_dict['Income Statement']['Interest Expense'] = ie
 
 
     return data_dict, date_dict
