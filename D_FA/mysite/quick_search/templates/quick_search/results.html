@@ -2,9 +2,15 @@
 
 {% block content %}
 
-{% for row in results %}
-	<p>{{ row }}</p>
-{% endfor %}
+
+<p>&nbsp;</p>
+	{% for line in stock %}
+		<p>{{line}}</p>
+	{% endfor %}
+	{% for line in fin_statement %}
+		<p>{{line}}</p>
+	{% endfor %}
+<p>&nbsp;</p>
 
 {% include "home/includes/snippet.html" %}
 

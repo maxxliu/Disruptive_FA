@@ -12,14 +12,6 @@ class Stock(models.Model):
 	def __str__(self):
 		return self.ticker
 
-	def __repr__(self):
-		return {
-			'ticker': self.ticker,
-			'name': self.name,
-			'sector': self.sector,
-			'industry': self.industry
-		}
-
 
 class Fin_Statement(models.Model):
 	ticker = models.ForeignKey(Stock, on_delete=models.CASCADE)
