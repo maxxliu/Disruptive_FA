@@ -146,7 +146,7 @@ def collect_fin_data(ticker):
         data_loc = soup.find_all('table')[5]
         raw_data = data_loc.find_all('tr')
         if len(raw_data) <= 1:
-            return {}, {}
+            return None, None
 
         clean_tags = []
         for tag in raw_data:
@@ -179,9 +179,14 @@ def summary_info(ticker):
     ticker = ticker.lower()
     url = 'http://www.nasdaq.com/symbol/' + ticker
     r = requests.get(url)
+    if r.status_code == 404 or r.status_code == 403:
+        return None
     html = r.text
     soup = bs4.BeautifulSoup(html, 'lxml')
-    data_tables = soup.find_all('table')[8].find_all('td')
+    try:
+        data_tables = soup.find_all('table')[8].find_all('td')
+    except:
+        return None
 
     keys = []
     values = []
