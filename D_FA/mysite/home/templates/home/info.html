@@ -2,8 +2,60 @@
 
 {% block content %}
 
+<h2>What does it mean when you hear a company is worth $X billion?</h2>
+<p>There are several ways of valuing a company:</P>
+	<ul>Comparable companies</ul>
+	<ul>Precedent transactions</ul>
+	<ul>Leveraged buyout</ul>
+	<ul><b>Discounted cash flow</b></ul>
+
 <p>&nbsp;</p>
 
-{% include "home/includes/snippet.html" %}
+<h3>A <b>DCF</b> tries to figure out how much a company is worth today <b>based on how much money it is projected to make in the future.</b></h3>
+<p>Described as “discounted” cash flow because <b>cash now is worth more than cash in the future.</b></p>
+<p>DCFs use this principle by summing the discounted, predicted free cash flows of a company to present time</p>
+
+<p>&nbsp;</p>
+
+<h3>Think of it this way:</h3>
+<p>Net Present Value (NPV) = Cash Flow<sub>1</sub> / (1+r) + Cash Flow<sub>2</sub> / (1+r)<sup>2</sup> ... + Cash Flow<sub>n</sub> / (1+r)<sup>n</sup></p>
+
+<p>&nbsp;</p>
+
+<h3>Valuation: Key Terms</h3>
+<p><b>Equity Value</b>: how much a company is worth (sticker price)</p>
+	<ul>Equity Value = Outstanding Shares * Share Price</ul>
+<p><b>Enterprise Value</b>: how much a company costs to acquire</p>
+	<ul>EV = Equity Value - Cash + Debt + Preferred Stock + Minority Interests</ul>
+<p><b>EBIT</b>: Earnings Before Interest and Tax (Operating Income)</p>
+	<ul>EBIT = Revenue - COGS (Cost of Goods Sold) - Operating Expenses</ul>
+<p><b>EBITDA</b>: Earnings Before Interest Tax Depreciation &amp; Amortization</p>
+	<ul>EBITDA = EBIT + Depreciation &amp; Amortization</ul>
+<p><b>FCF</b>: Free Cash Flow</p>
+	<ul>FCF = EBIT (1 - tax rate) + Depreciation &amp; Amortization - Change in NWC (Net Working Capital) - CapEx (Capital Expenditure)</ul>
+
+<p>&nbsp;</p>
+
+<h3>The Importance of the Income Statement in the DCF</h3>
+<p><b>Income Statement</b></p>
+<p>Revenue - COGS = <b>Gross Revenue</b></p>
+<p>Gross Revenue - SG&amp;A (Selling, General and Administrative Expenses) = <b>EBITDA</b></p>
+<p>EBITDA - Depreciation &amp; Amortization = <b>EBIT</b></p>
+<p>EBIT - Interest Expense = <b>EBT</b></p>
+<p>EBT - Tax Expense = <b>Net Income</b></p>
+
+<p>&nbsp;</p>
+
+<h3>Overview of Steps in Calculating a DCF:</h3>
+<p>1.&emsp;<a href="/step_1/">Establish timeframe</a></p>
+<p>2.&emsp;<a href="/step_2/"><b>Forecast revenue</b> growth and operating expenses</a></p>
+<p>3.&emsp;<a href="/step_3/">Calculate <b>free cash flows</b></a></p>
+<p>4.&emsp;<a href="/step_4/">Calculate <b>discount rate</b></a></p>
+<p>5.&emsp;<a href="/step_5/">Find <b>present value</b> of future cash flows</a></p>
+<p>6.&emsp;<a href="/step_6/">Calculate <b>terminal value</b></a></p>
+<p>7.&emsp;<a href="/step_7/">Calculate <b>enterprise value</b></a></p>
+<p>8.&emsp;<a href="/step_8/">Find implied <b>share price</b></a></p>
+
+<p>&nbsp;</p>
 
 {% endblock %}
