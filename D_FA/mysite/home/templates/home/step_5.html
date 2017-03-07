@@ -2,8 +2,22 @@
 
 {% block content %}
 
+<h2>Step 5: Finding Present Value of Future Cash Flows</h2>
+
 <p>&nbsp;</p>
 
-{% include "home/includes/snippet.html" %}
+<h3>How it's Calculated</h3>
+<p><b>Present Value</b> = FCF<sub>1</sub> / (1+r) + FCF<sub>2</sub> / (1+r)<sup>2</sup> + FCF<sub>n</sub> / (1+r)<sup>n</sup> + Terminal Value / (1+r)<sup>n</sup></p>
+
+<p>&nbsp;</p>
+
+<p>Discounting the future free cash flows for the N = 5- or 10-year period gives the <b>present value</b> of the future free cash flows (PV FCF)</p>
+<p>r = discount rate (WACC in this case)</p>
+
+<p>&nbsp;</p>
+
+{% include "home/includes/toc.html" %}
+
+<p>&nbsp;</p>
 
 {% endblock %}
