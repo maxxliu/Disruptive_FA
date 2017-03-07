@@ -96,7 +96,10 @@ def get_interest_expense(ticker):
     soup = bs4.BeautifulSoup(html, 'lxml')
     year_lst = []
     tr = soup.find_all('tr')
-    th = tr[0].find_all('th')
+    try:
+        th = tr[0].find_all('th')
+    except:
+        return [0, 0, 0, 0], [0, 0, 0, 0]
     for year in th[1:-1]:
         text = year.get_text()
         year_lst.append(text)
@@ -108,7 +111,10 @@ def get_interest_expense(ticker):
             td = tag.find_all('td')
             div = td[6].find_all('div')[0]
             string = div.get('data-chart')
-            string = re.search('\[[\w,]+\]', string).group()
+            try:
+                string = re.search('\[[\w,]+\]', string).group()
+            except:
+                return [0, 0, 0, 0], [0, 0, 0, 0]
             string = string.replace('null', '"null"')
             expense_years = ast.literal_eval(string)
             break
@@ -162,9 +168,10 @@ def collect_fin_data(ticker):
             if key_name != 0:
                 current_dict[key_name] = data_vals
 
-    if data_dict['Income Statement']['Interest Expense'][-1] == 0:
-        ie = get_interest_expense(ticker)[1]
-        data_dict['Income Statement']['Interest Expense'] = ie
+    if 'Interest Expense' in data_dict['Income Statement']:
+        if data_dict['Income Statement']['Interest Expense'][-1] == 0:
+            ie = get_interest_expense(ticker)[1]
+            data_dict['Income Statement']['Interest Expense'] = ie
 
 
     return data_dict, date_dict
@@ -207,8 +214,11 @@ def summary_info(ticker):
             else:
                 values.append(text[0])
 
-    for i in range(len(keys)):
-        summary_d[keys[i]] = values[i]
+    try:
+        for i in range(len(keys)):
+            summary_d[keys[i]] = values[i]
+    except:
+        return None
             
     return summary_d
 
