@@ -38,12 +38,12 @@ class Data_Date(models.Model):
 
 class Summary_Data(models.Model):
 	ticker = models.ForeignKey(Stock, on_delete=models.CASCADE)
-	target = models.DecimalField(max_digits=7, decimal_places=2)
-	year_high = models.DecimalField(max_digits=7, decimal_places=2)
-	year_low = models.DecimalField(max_digits=7, decimal_places=2)
+	target = models.DecimalField(max_digits=10, decimal_places=2)
+	year_high = models.DecimalField(max_digits=10, decimal_places=2)
+	year_low = models.DecimalField(max_digits=10, decimal_places=2)
 	beta = models.DecimalField(max_digits=5, decimal_places=2)
 	market_cap = models.BigIntegerField()
-	previous_close = models.DecimalField(max_digits=7, decimal_places=2)
+	previous_close = models.DecimalField(max_digits=10, decimal_places=2)
 	updated = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
