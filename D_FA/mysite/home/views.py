@@ -5,12 +5,12 @@ def index(request):
 	return render(request, 'home/home.html')
 
 
-def quick_search(request):
-	return render(request, 'quick_search/quick_search.html')
+def stock_search(request):
+	return render(request, 'quick_search/stock_search.html')
 
 
-def advanced_search(request):
-	return render(request, 'advanced_search/advanced_search.html')
+def risk_survey(request):
+	return render(request, 'risk_survey/risk_survey.html')
 
 
 def info(request):

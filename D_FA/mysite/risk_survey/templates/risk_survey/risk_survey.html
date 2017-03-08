@@ -1,0 +1,50 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+
+<h2>Risk Assessment Survey</h2>
+
+<p>&nbsp;</p>
+
+<form method="POST" action="/risk_survey/scored/">
+	{% csrf_token %}
+	<table class="table table-fixed">
+		<thead>
+			<tr>
+				<th>Question</th>
+				<th>Response</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td>Question 1</td>
+				<td>
+					<input type="radio" name="risk1" value="1"> Strongly Disagree&ensp;&ensp;&ensp;&ensp;
+					<input type="radio" name="risk1" value="2"> Disagree&ensp;&ensp;&ensp;&ensp;
+					<input type="radio" name="risk1" value="3" checked="checked"> Neutral&ensp;&ensp;&ensp;&ensp;
+					<input type="radio" name="risk1" value="4"> Agree&ensp;&ensp;&ensp;&ensp;
+					<input type="radio" name="risk1" value="5"> Strongly Agree
+				</td>
+			</tr>
+			<tr>
+				<td>Question 2</td>
+				<td>
+					<input type="radio" name="risk2" value="1"> Strongly Disagree&ensp;&ensp;&ensp;&ensp;
+					<input type="radio" name="risk2" value="2"> Disagree&ensp;&ensp;&ensp;&ensp;
+					<input type="radio" name="risk2" value="3" checked="checked"> Neutral&ensp;&ensp;&ensp;&ensp;
+					<input type="radio" name="risk2" value="4"> Agree&ensp;&ensp;&ensp;&ensp;
+					<input type="radio" name="risk2" value="5"> Strongly Agree
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+<p>&nbsp;</p>
+
+	<input type="submit" value="Calculate">
+</form>
+
+
+<p>&nbsp;</p>
+
+{% endblock %}
