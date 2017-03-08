@@ -140,3 +140,84 @@ def format_fin_statements(fin_statements):
 		fin_table_list.append(row)
 
 	return fin_table_list
+
+
+def advanced_search(sect, indust, mc):
+	'''
+	'''
+	mc_dict = {
+		"0": (0, 1000000),
+		"1M": (1000000, 100000000),
+		"100M": (100000000, 1000000000),
+		"1B": (1000000000, 10000000000),
+		"10B": (0, 0)}
+
+	if sect != "None" and indust != "None":
+		pre = Stock.objects.filter(sector = sect, industry = indust)
+		
+		if mc != "None":
+			mid = []
+			for obj in pre:
+				current = Summary_Data.objects.get(ticker = obj)
+				if mc != "10B":
+					if mc_dict[mc][0] < current.market_cap <= mc_dict[mc][1]:
+						mid.append(obj)
+				else:
+					if current.market_cap > 10000000000:
+						mid.append(obj)
+			fin = []
+			for obj in mid:
+				fin.append([obj.ticker, obj.name])
+
+			return fin
+
+		else:
+			fin = []
+			for obj in pre:
+				fin.append([obj.ticker, obj.name])
+
+			return fin
+
+	elif sect != "None" and indust == "None":
+		pre = Stock.objects.filter(sector = sect)
+		if mc != "None":
+			mid = []
+			for obj in pre:
+				current = Summary_Data.objects.get(ticker = obj)
+				if mc != "10B":
+					if mc_dict[mc][0] < current.market_cap <=mc_dict[mc][1]:
+						mid.append(obj)
+				else:
+					if current.market_cap > 10000000000:
+						mid.append(obj)
+			fin = []
+			for obj in mid:
+				fin.append([obj.ticker, obj.name])
+
+			return fin
+
+		else:
+			fin = []
+			for obj in pre:
+				fin.append([obj.ticker, obj.name])
+
+			return fin
+
+	else:
+		if mc != "10B":
+			pre = Summary_Data.objects.filter(mc_dict[mc][0] < market_cap <= mc_dict[mc][1])
+
+			fin = []
+			for obj in pre:
+				fin.append([obj.ticker.ticker, obj.ticker.name])
+
+			return fin
+
+		else:
+			pre = Summary_Data.objects.filter(market_cap > 10000000000)
+
+			fin = []
+			for obj in pre:
+				fin.append([obj.ticker.ticker, obj.ticker.name])
+
+			return fin

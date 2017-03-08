@@ -1,0 +1,30 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+
+<h2>Recommended Stocks Based on Your Search</h2>
+
+<p>&nbsp;</p>
+
+<table class="table table-fixed">
+	<thead>
+		<tr>
+			<th>Company Name</th>
+			<th>Link to Results</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for line in recommended %}
+			<tr>
+				<td>{{line.1}}</td>
+				<td>
+					<form action="/stock_search/results/" method="GET"/>
+					<input type="submit" name="textfield" value={{line.0}}>
+					</form>
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{%endblock %}

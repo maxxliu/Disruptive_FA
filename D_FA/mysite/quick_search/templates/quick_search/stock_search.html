@@ -4,6 +4,10 @@
 
 <h2>Search for Your Stock of Interest</h2>
 
+{% for line in test %}
+	<p>{{line}}</p>
+{% endfor %}
+
 <p>&nbsp;</p>
 
 <h3>Stock Ticker</h3>
@@ -18,45 +22,48 @@
 
 <h3>Stock Parameters</h3>
 
-<form method="POST" action="/stock_search/">
+<form method="POST" action="/stock_search/advanced/">
 	{% csrf_token %}
-	<table class="table table-fixed">
-		<thead>
-			<th>Sector</th>
-			<th>Industry</th>
-			<th>Market Cap</th>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<select name="Industry">
-						<option value="None" selected>&nbsp;</option>
-						<option value="Technology">Technology</option>
-						<option value="Capital Goods">Capital Goods</option>
-					</select>
-				</td>
-				<td>
-					<select name="Sector">
-						<option value="None" selected>&nbsp;</option>
-						<option value="Computer Manufacturing">Computer Manufacturing</option>
-						<option value="Capital Goods">Aerospace</option>
-					</select>
-				</td>
-				<td>
-					<select name="Market Cap">
-						<option value="None" selected>&nbsp;</option>
-						<option value="0">$0 - $1M</option>
-						<option value="1000000">$1M - $100M</option>
-						<option value="100000000">$100M - $1B</option>
-						<option value="1000000000">$1B - $10B</option>
-						<option value="10000000000">$10B +</option>
-					</select>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+		<table class="table table-fixed">
+			<thead>
+				<th>Sector</th>
+				<th>Industry</th>
+				<th>Market Cap</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<select type="text" name="Sector">
+							<option value="None" selected>&nbsp;</option>
+							{% for line in sector %}
+								<option value="{{line}}">{{line}}</option>
+							{% endfor %}
+						</select>
+					</td>
+					<td>
+						<select type="text" name="Industry">
+							<option value="None" selected>&nbsp;</option>
+							{% for line in industry %}
+								<option value="{{line}}">{{line}}</option>
+							{% endfor %}
+						</select>
+					</td>
+					<td>
+						<select type="text" name="Market Cap">
+							<option value="None" selected>&nbsp;</option>
+							<option value="0">$0 - $1M</option>
+							<option value="1M">$1M - $100M</option>
+							<option value="100M">$100M - $1B</option>
+							<option value="1B">$1B - $10B</option>
+							<option value="10B">$10B +</option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	<p align="center"><button type="submit">Search</button></p>
 </form>
-<p>&nbsp;</p>
 
+<p>&nbsp;</p>
 
 {% endblock %}

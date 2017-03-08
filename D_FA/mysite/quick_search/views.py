@@ -2,11 +2,14 @@ from django.shortcuts import render, HttpResponse
 from django.forms.models import model_to_dict
 from .models import *
 from .helper import *
+from .get_lsts import SECTORS, INDUSTRY
 from django.core.exceptions import *
 
 # Create your views here.
 def index(request):
-	return render(request, 'quick_search/stock_search.html')
+	return render(request, 'quick_search/stock_search.html', 
+		{'sector': SECTORS,
+		'industry': INDUSTRY})
 
 
 def results(request):
@@ -56,4 +59,17 @@ def results(request):
 		except Stock.DoesNotExist:
 			return render(request, 'quick_search/error.html')
 	else:
-		return render(request, 'quick_search/quick_search.html')
+		return render(request, 'quick_search/stock_search.html', 
+		{'sector': SECTORS,
+		'industry': INDUSTRY})
+
+def advanced(request):
+	if request.method == "POST":
+		sect = request.POST['Sector']
+		indust = request.POST['Industry']
+		mc = request.POST['Market Cap']
+
+		fin = advanced_search(sect, indust, mc)
+
+		return render(request, 'quick_search/advanced.html',
+			{'recommended': fin})
