@@ -11,7 +11,7 @@ def index(request):
 
 def results(request):
 	if request.method == "POST":
-		search = request.POST['textfield']
+		search = request.POST['textfield'].upper()
 	elif request.method == "GET":
 		search = request.GET['textfield']
 
@@ -27,7 +27,7 @@ def results(request):
 				recommended = get_recommended(stock, summary_data)
 
 			except Summary_Data.DoesNotExist:
-				return HttpResponse("<p>error</p>")
+				return render(request, 'quick_search/error.html')
 
 			try:
 				data_date = Data_Date.objects.get(ticker = stock)
@@ -54,6 +54,6 @@ def results(request):
 				'recommended': recommended
 				})		
 		except Stock.DoesNotExist:
-			return HttpResponse("<p>error</p>")
+			return render(request, 'quick_search/error.html')
 	else:
 		return render(request, 'quick_search/quick_search.html')
