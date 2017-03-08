@@ -21,6 +21,7 @@ def results(request):
 	if search:
 		try:
 			stock = Stock.objects.get(ticker = search)
+			update_summary_data(stock.ticker)
 
 			try:
 				summary_data = Summary_Data.objects.get(ticker = stock)
