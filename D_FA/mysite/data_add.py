@@ -35,7 +35,7 @@ def fix_summary(summ_d):
 
 
 def populate_db():
-    for index, row in NYSE.iterrows():
+    for index, row in NASDAQ.iterrows():
         print(index)
         ticker1 = row['Symbol']
         name1 = row['Name']
