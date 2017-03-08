@@ -1,0 +1,119 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+
+<h2>Step 3: Calculate Free Cash Flows (FCF)</h2>
+
+<p>&nbsp;</p>
+
+<h3><b>FCF</b>: Free Cash Flow</h3>
+<p>FCF = EBIT * (1 - Tax Rate) + Depreciation &amp; Amortization - Change in Net Working Capital - Capital Expenditures</p>
+
+<p>&nbsp;</p>
+
+<table class="table">
+	<tr>
+		<th>&nbsp;</th>
+		<th>Year 1</th>
+		<th>Year 2</th>
+		<th>Year 3</th>
+		<th>Year 4</th>
+		<th>Year 5</th>
+	</tr>
+	<tr>
+		<th>&nbsp;</th>
+		<th>2015</th>
+		<th>2016</th>
+		<th>2017</th>
+		<th>2018</th>
+		<th>2019</th>
+	</tr>
+	<tr>
+		<td>Revenue</td>
+		<td>100</td>
+		<td>110</td>
+		<td>121</td>
+		<td>133.1</td>
+		<td>146.41</td>
+	</tr>
+	<tr>
+		<td>COGS</td>
+		<td>20</td>
+		<td>22</td>
+		<td>24.2</td>
+		<td>26.62</td>
+		<td>29.282</td>
+	</tr>
+	<tr>
+		<td>Operating Expenses</td>
+		<td>30</td>
+		<td>33</td>
+		<td>36.3</td>
+		<td>39.93</td>
+		<td>43.923</td>
+	</tr>
+	<tr>
+		<td>Gross Margin</td>
+		<td>50</td>
+		<td>55</td>
+		<td>60.5</td>
+		<td>66.55</td>
+		<td>73.205</td>
+	</tr>
+	<tr>
+		<td>Tax</td>
+		<td>20</td>
+		<td>22</td>
+		<td>24.2</td>
+		<td>26.62</td>
+		<td>29.282</td>
+	</tr>
+	<tr>
+		<th>EBIT(1 - Tax Rate)</th>
+		<td>30</td>
+		<td>33</td>
+		<td>36.3</td>
+		<td>39.93</td>
+		<td>43.923</td>
+	</tr>
+	<tr>
+		<th>D &amp; A</th>
+		<td>5</td>
+		<td>5</td>
+		<td>5</td>
+		<td>10</td>
+		<td>10</td>
+	</tr>
+	<tr>
+		<th>Change in NWC</th>
+		<td>2</td>
+		<td>2</td>
+		<td>4</td>
+		<td>5</td>
+		<td>5</td>
+	</tr>
+	<tr>
+		<th>Capital Expenditures</th>
+		<td>10</td>
+		<td>10</td>
+		<td>10</td>
+		<td>15</td>
+		<td>15</td>
+	</tr>
+	<tr>
+		<th bgcolor="silver"><font color="navy">Free Cash Flow</font></th>
+		<td bgcolor="silver"><font color="navy">23</font></td>
+		<td bgcolor="silver"><font color="navy">26</font></td>
+		<td bgcolor="silver"><font color="navy">27.3</font></td>
+		<td bgcolor="silver"><font color="navy">29.93</font></td>
+		<td bgcolor="silver"><font color="navy">33.923</font></td>
+	</tr>	
+</table>
+
+<p>&nbsp;</p>
+
+{% include "home/includes/toc.html" %}
+
+<p>&nbsp;</p>
+
+{% endblock %}

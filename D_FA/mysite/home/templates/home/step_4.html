@@ -1,0 +1,36 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+
+<h2>Step 4: Calculate the Discount Rate</h2>
+
+<p>&nbsp;</p>
+
+<h3>Capital Structure:</h3>
+<p><b>Weighted Average Cost of Capital</b> (WACC):</p>
+<ul>We will use WACC as our value for the discount rate</ul>
+	<ul>WACC = (E / D+E) * (r<sub>e</sub>) + (D / D+E) * (r<sub>d</sub>)(1 - t)</ul>
+	<ul>Where:</ul>
+		<ul><ul>E = market value of equity <b>(Cost of Equity)</b></ul></ul>
+		<ul><ul>D = market value of debt <b>(Borrowing Rate)</b></ul></ul>
+		<ul><ul>r<sub>e</sub> = cost of equity</ul></ul>
+		<ul><ul>r<sub>d</sub> = cost of debt</ul></ul>
+		<ul><ul>t = corporate tax rate</ul></ul>
+
+<p>&nbsp;</p>
+
+<h3>Cost of Equity</h3>
+<p><b>Beta</b>= measure of <b>how volatile the company is relative to the overall market</b></p>
+<p>r<sub>RF</sub> = Risk-free rate (usually 10 year Treasury rate)</p>
+<p>r<sub>M</sub> - r<sub>RF</sub> = Equity market risk premium (threshold for risk)</p>
+	<ul>This is the return investors expect over the risk-free rate for the volatility of the stock</ul>
+	<ul>We will modify this value with the results from our risk assessment survey in our <a href="/advanced_search/">Advanced Search</a></ul>
+<p><b>Cost of Equity</b> = r<sub>RF</sub> + Beta(r<sub>M</sub> - r<sub>RF</sub>)</p>
+
+<p>&nbsp;</p>
+
+{% include "home/includes/toc.html" %}
+
+<p>&nbsp;</p>
+
+{% endblock %}

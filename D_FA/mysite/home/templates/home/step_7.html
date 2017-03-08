@@ -1,0 +1,29 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+
+<h2>Step 7: Calculating Enterprise Value</h2>
+
+<p>&nbsp;</p>
+
+<h3>Making Use of the Terminal Value</h3>
+<p>After finding the present value of future free cash flows (PV FCF), the second step is to find the present value of the <b>terminal value (PV TV)</b> that we have just calculated</p>
+
+<p>&nbsp;</p>
+
+<p><b>PV Terminal Value = Terminal Value / (1+WACC)<sup>n</sup></b></p>
+
+<p>&nbsp;</p>
+
+<p><b>Enterprise Value = PV FCF + PV TV</b></p>
+	<ul>Where:</ul>
+		<ul><ul>PV FCF: Present value of free cash flows</ul></ul>
+		<ul><ul>PV TV: Present value of the terminal value</ul></ul>
+
+<p>&nbsp;</p>
+
+{% include "home/includes/toc.html" %}
+
+<p>&nbsp;</p>
+
+{% endblock %}

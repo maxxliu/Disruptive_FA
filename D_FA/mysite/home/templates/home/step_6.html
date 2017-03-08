@@ -1,0 +1,30 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+
+<h2>Step 6: Calculate Terminal Value</h2>
+
+<p>&nbsp;</p>
+
+<h3>Terminal Value is the value of the business <b>beyond the projected timeline</b></h3>
+<p>Projecting into the future can be impractical</p>
+
+<p>&nbsp;</p>
+
+<h3>Two Methods of Calculation</h3>
+<p><b>Gordon Growth Model</b></p>
+	<ul>AKA perpetuity growth method</ul>
+	<ul>Assumes FCFs grow at a constant rate forever</ul>
+		<ul><ul>Terminal Value = FCF<sub>n</sub>*(1+g) / (r-g)</ul></ul>
+		<ul><ul>Where: r = WACC, g = growth rate, n = final year of projection</ul></ul>
+<p><b>Exit Multiple Method</b><p>
+	<ul>Values business as a multiple of operating statistic</ul>
+		<ul><ul>Terminal Value = EBITDA<sub>n</sub> * Multiple</ul></ul>
+
+<p>&nbsp;</p>
+
+{% include "home/includes/toc.html" %}
+
+<p>&nbsp;</p>
+
+{% endblock %}

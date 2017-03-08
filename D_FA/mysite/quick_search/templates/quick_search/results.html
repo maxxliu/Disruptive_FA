@@ -1,18 +1,111 @@
 {% extends "home/header.html" %}
 
 {% block content %}
+<head>
+	<style media="screen" type="text/css">
+	</style>
+</head>
 
+	{% for line in header %}
+		<h3>{{line}}</h3>
+	{% endfor %}
 
 <p>&nbsp;</p>
-	{% for line in stock %}
-		<p>{{line}}</p>
-	{% endfor %}
-	{% for line in fin_statement %}
-		<p>{{line}}</p>
-	{% endfor %}
-	{% for line in summary_data %}
-		<p>{{line}}</p>
-	{% endfor %}
+
+<p>Here are some stock metrics that are used in the calculation of our discount cash flow.</p>
+<p>Learn more about our calculations here: <a href="/info/">Behind the Calculations</a></p>
+
+<p>&nbsp;</p>
+
+<div id="" style="overflow-y:scroll; height:400px;">
+	<table class="table table-fixed">
+	  <thead>
+	    <tr>
+	    	<th>Line Item</th>
+	    	{% for line in dates %}
+	    		<th>{{line}}</th>
+	    	{% endfor %}
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for line in fin_statements %}
+	  		<tr>
+	  			{% for item in line %}
+	  				<td>{{item}}</td>
+	  			{% endfor %}
+	  		</tr>
+	  	{% endfor %}
+	  </tbody>
+	</table>
+</div>
+
+
+
+
+
+<!-- <div class="container">
+	<div class="row">
+		<div class="panel panel-default">
+		<div class="panel-heading text-center"><b>Financials</b></div>
+		<div class="panel-body">
+			<p>Here are some stock metrics that are used in the calculation of our discount cash flow.</p>
+			<p>Learn more about our calculations here: 
+				<a href="/info/">Behind the Calculations</a>
+			</p>
+		</div>
+		<table class="table table-fixed">
+			<thead>
+				<tr>
+		    		<th>Line Item</th>
+					{% for line in dates %}
+						<th>{{line}}</th>
+					{% endfor %}
+		    	</tr>
+	    	</thead>
+	    	<tbody>
+		    	{% for line in fin_statements %}
+		    		<tr>
+					{% for item in line %}
+						<td>{{item}}</td>
+					{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		</div>
+	</div>
+</div> -->
+
+<p>&nbsp;</p>
+	{% if error %}
+		{% for line in error %}
+			<p>{{line}}</p>
+		{% endfor %}
+	{% endif %}
+
+<p>&nbsp;</p>
+	
+	<div class="panel panel-default">
+	<div class="panel-heading text-center"><b>Recommended</b></div>
+
+	<table class="table">
+			<tr>
+				<th>Company Name</th>
+				<th>Link to Results</th>
+			</tr>
+			{% for line in recommended %}
+				<tr>
+					<td>{{line.1}}</td>
+					<td>
+						<form action="/quick_search/results/" method="GET"/>
+						<input type="submit" name="textfield" value={{line.0}}>
+					</form>
+					</td>
+				</tr>
+			{% endfor %}
+	</table>
+	</div>
+
 <p>&nbsp;</p>
 
 {% include "home/includes/snippet.html" %}
