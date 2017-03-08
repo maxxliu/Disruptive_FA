@@ -1,4 +1,6 @@
 from .models import *
+from django.utils import timezone
+import data_gathering
 
 # Helper functions for the quick_search views.py
 
@@ -221,3 +223,51 @@ def advanced_search(sect, indust, mc):
 				fin.append([obj.ticker.ticker, obj.ticker.name])
 
 			return fin
+
+
+def update_summary_data(stock_ticker):
+	'''
+	updates summary data for stocks
+	'''
+    stock_ticker = stock_ticker.upper()
+    try:
+        s = Stock.objects.get(ticker=stock_ticker)
+        sd = Summary_Data.objects.get(ticker=s)
+    except:
+        return None
+    if sd.updated.day != timezone.now().day:
+        new_sd = data_gathering.summary_info(stock_ticker)
+        fix_summary(new_sd)
+        sd.target = float(new_sd['1 Year Target'])
+        sd.year_high = float(new_sd['52 Week High/Low'][0])
+        sd.year_low = float(new_sd['52 Week High/Low'][1])
+        sd.beta = float(new_sd['Beta'])
+        sd.market_cap = new_sd['Market cap']
+        sd.previous_close = float(new_sd['Previous Close'])
+        sd.updated = timezone.now()
+        sd.save()
+
+
+def fix_summary(summ_d):
+	'''
+	fixes the summary dictionary if its formatting is inconsistent
+	'''
+    for key, value in summ_d.items():
+        if value == '':
+            summ_d[key] = 0
+
+    for key in ['1 Year Target', '52 Week High/Low', 'Beta', 'Market cap', 'Previous Close']:
+        if key in summ_d:
+            if key != '52 Week High/Low':
+                if type(summ_d[key]) == list:
+                    summ_d[key] = 0
+            else:
+                try:
+                    summ_d[key][0] = float(summ_d[key][0])
+                except:
+                    summ_d[key] = [0, 0]
+        else:
+            if key == '52 Week High/Low':
+                summ_d[key] = [0, 0]
+            else:
+                summ_d[key] = 0
