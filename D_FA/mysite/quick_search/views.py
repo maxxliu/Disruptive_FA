@@ -6,7 +6,7 @@ from django.core.exceptions import *
 
 # Create your views here.
 def index(request):
-	return render(request, 'quick_search/quick_search.html')
+	return render(request, 'quick_search/stock_search.html')
 
 
 def results(request):

@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^step_6/$', views.step_6, name='step_6'),
     url(r'^step_7/$', views.step_7, name='step_7'),
     url(r'^step_8/$', views.step_8, name='step_8'),
-    url(r'^quick_search/$', views.quick_search, name='quick_search'),
-    url(r'^advanced_search/$', views.advanced_search, name='advanced_search')
+    url(r'^stock_search/$', views.stock_search, name='stock_search'),
+    url(r'^risk_survey/$', views.risk_survey, name='risk_survey')
 ]
