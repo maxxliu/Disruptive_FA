@@ -47,7 +47,15 @@
 	{% endif %}
 
 <p>&nbsp;</p>
-	
+
+{% if dcf %}
+	{% for line in dcf %}
+		<h3>Projected Price: {{line}}</h3>
+	{% endfor %}
+{% endif %}
+
+<p>&nbsp;</p>
+
 	<div class="panel panel-default">
 	<div class="panel-heading text-center"><b>Recommended</b></div>
 	<table class="table">

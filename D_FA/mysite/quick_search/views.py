@@ -2,6 +2,8 @@ from django.shortcuts import render, HttpResponse
 from django.forms.models import model_to_dict
 from .models import *
 from .helper import *
+from .dcf_equation import *
+from risk_survey.models import *
 from .get_lsts import SECTORS, INDUSTRY
 from django.core.exceptions import *
 
@@ -26,7 +28,6 @@ def results(request):
 			try:
 				summary_data = Summary_Data.objects.get(ticker = stock)
 				header_list = format_header(stock, summary_data)
-				# check for update on summary data values
 
 				recommended = get_recommended(stock, summary_data)
 
@@ -39,8 +40,11 @@ def results(request):
 				# check for update on fin statemenet values
 
 				fin_statements = Fin_Statement.objects.filter(ticker = stock)
-				# calculate DCF and rating from financials list
 				fin_table_list = format_fin_statements(fin_statements)
+
+				dcf_dict = create_dict(stock.ticker)
+				r_m = float(str(rm.objects.get(rm_id = 1).risk))
+				price, growth, years = dcf_calculator(dcf_dict, r_m)
 
 			except Data_Date.DoesNotExist:
 				return render(request, 'quick_search/results.html',
@@ -48,6 +52,7 @@ def results(request):
 					'dates': ['n/a', 'n/a', 'n/a', 'n/a'],
 					'fin_statements': [['n/a', 'n/a', 'n/a', 'n/a', 'n/a']],
 					'error': ["Sorry, it seems like we don't have enough information for this stock. Please take a look at our list of recommended stocks."],
+					'dcf': [],
 					'recommended': recommended})
 
 			return render(request, 'quick_search/results.html', 
@@ -55,6 +60,7 @@ def results(request):
 				'dates': date_list,
 				'fin_statements': fin_table_list,
 				'error': [],
+				'dcf': ['$' + str(round(price, 2))],
 				'recommended': recommended
 				})		
 		except Stock.DoesNotExist:
