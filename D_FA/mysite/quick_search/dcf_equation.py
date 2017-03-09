@@ -1,6 +1,59 @@
 import pandas as pd
 
 
+def get_current_ebit(fin_dict):
+    revenue = fin_dict['Income Statement']['Total Revenue'][-1]
+    cost = fin_dict['Income Statement']['Cost of Revenue'][-1]
+    sga = fin_dict['Income Statement']['Sales, General and Admin.'][-1]
+    depreciation = fin_dict['Cash Flow']['Depreciation'][-1]
+    return revenue - cost - sga - depreciation
+
+
+def get_rd(fin_dict):
+    credit_rating_values = [0.04, 0.045, 0.05, 0.055, 0.085, 0.1, 0.12]
+    market_cap = fin_dict['Summary Data']['market cap']
+    ebit = get_current_ebit(fin_dict)
+    interest_expense = fin_dict['Income Statement']['Interest Expense'][-1]
+    icr = ebit / interest_expense
+    value = -1
+    if market_cap > 5000000000:
+        if icr >= 3:
+            if icr < 6.5:
+                value = 2
+            elif icr < 8.5:
+                value = 1
+            else:
+                value = 0
+        else:
+            if icr >= 2.5:
+                value = 3
+            elif icr >= 2:
+                value = 4
+            elif icr >= 1.25:
+                value = 5
+            else:
+                value = 6
+    else:
+        if icr >= 4.5:
+            if icr < 9.5:
+                value = 2
+            elif icr < 12.5:
+                value = 1
+            else:
+                value = 0
+        else:
+            if icr >= 4:
+                value = 3
+            elif icr >= 3:
+                value = 4
+            elif icr >= 1.5:
+                value = 5
+            else:
+                value = 6
+    return credit_rating_values[value]
+
+
+
 
 
 def data_dictionary(dates, stock_list):
@@ -36,13 +89,8 @@ def linear_regression(year_value_lst):
         sum_x_squared += x_squared
     mean_xy = sum_xy / len(year_value_lst)
     mean_x_squared = sum_x_squared / len(year_value_lst)
-
-        #y_difference = year_value_lst[i] - y_bar
-        #x_difference_squared = (x_difference) ** 2
-        #x_dif_y_dif = x_difference * y_difference
     if count > 0 and count < len(year_value_lst):
         potential_error = True
-    #slope = sum_x_times_y / sum_x_squared
     slope = (x_bar * y_bar - mean_xy) / ((x_bar ** 2) - mean_x_squared)
     y_int = y_bar - slope * x_bar
     return slope, y_int, potential_error
@@ -57,22 +105,7 @@ def get_values(slope, y_int, year):
     '''
     return slope * year + y_int
 
-# fin_dict = {'Long-Term Debt': [30, 28987000000, 53329000000, 75427000000],
-#             'Short-Term Debt': [0, 6308000000, 10999000000, 11605000000],
-#             'Total Equity': [128249000000],
-#             'Interest Expense' : [1.5],
-#             'Beta' : [1.5],
-#             'Total Current Assets': [73286000000, 68531000000, 89378000000, 106869000000],
-#             'Total Current Liabilities': [43658000000, 63448000000, 80610000000, 79006000000],
-#             'date': ['2013', '2014', '2015', '2016'],
-#             'Total Revenue': [170910000000, 182795000000, 233715000000, 215639000000],
-#             'Cost of Revenue': [106606000000, 112258000000, 140089000000, 131376000000],
-#             'Sales, General and Admin.': [10830000000, 11993000000, 14329000000, 14194000000],
-#             'Depreciation': [6757000000, 7946000000, 11257000000, 10505000000],
-#             'Capital Expenditures': [8165000000, 9571000000, 11247000000, 12734000000],
-#             'Cash and Cash Equivalents': [14259000000, 13844000000, 21120000000, 20484000000],
-#             'Minority Interest': [0, 0, 0, 0],
-#             'Share Volume': [5246540000]}
+
 
 def WACC(fin_dict, expected_return):
     '''
@@ -84,8 +117,7 @@ def WACC(fin_dict, expected_return):
     current_equity = fin_dict['Balance Sheet']['Total Equity'][-1]
     total_d_e = current_debt + current_equity
     beta = fin_dict['Summary Data']['beta']
-    rd = 0.05
-    #rd = fin_dict['Income Statement']['Interest Expense'][-1] / current_debt #interest expense not listed on Nasdaq
+    rd = get_rd(fin_dict)
     cost_equity = risk_free_rate + beta * (expected_return - risk_free_rate)
     WACC_val = (current_equity/total_d_e) * cost_equity + (current_debt/ total_d_e) * rd* (1 - tax_rate) #rd not pulled yet
     return WACC_val
@@ -107,6 +139,8 @@ def dcf_feasibility(fin_dict):
     assert len(value_lst) >= 3, 'Not enough years to create a meaningful DCF'
     test = list(set(value_lst))
     assert len(test) > 1 and test[0] != 0, 'Not enough information to create a meaningful DCF'
+
+
 
 
 
