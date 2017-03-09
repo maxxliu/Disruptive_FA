@@ -10,7 +10,7 @@ def data_dictionary(dates, stock_list):
     the dates and values into a financials dictionary
     '''
     financials_dict = {}
-    financials_dict['date'] = (dates.year_1, dates.year_2, dates.year_3, dates.year_4)
+    financials_dict['Dates'] = (dates.year_1, dates.year_2, dates.year_3, dates.year_4)
     for obj in stock_list:
         financials_dict[obj.line_item] = (obj.year_1_val, obj.year_2_val, obj.year_3_val, obj.year_4_val)
     return financials_dict
@@ -65,7 +65,7 @@ fin_dict = {'Long-Term Debt': [30, 28987000000, 53329000000, 75427000000],
             'Depreciation': [6757000000, 7946000000, 11257000000, 10505000000],
             'Capital Expenditures': [8165000000, 9571000000, 11247000000, 12734000000],
             'Cash and Cash Equivalents': [14259000000, 13844000000, 21120000000, 20484000000],
-            'Minority Interest': [0],
+            'Minority Interest': [0, 0, 0, 0],
             'Share Volume': [5246540000]}
 
 def WACC(fin_dict, expected_return):
@@ -74,12 +74,12 @@ def WACC(fin_dict, expected_return):
     '''
     risk_free_rate = 0.0246
     tax_rate = 0.35
-    current_debt = fin_dict['Long-Term Debt'][-1] + fin_dict['Short-Term Debt'][-1]
-    current_equity = fin_dict['Total Equity'][-1]
+    current_debt = fin_dict['Balance Sheet']['Long-Term Debt'][-1] + fin_dict['Balance Sheet']['Short-Term Debt'][-1]
+    current_equity = fin_dict['Balance Sheet']['Total Equity'][-1]
     total_d_e = current_debt + current_equity
-    beta = fin_dict['Beta'][-1]
-    rd = fin_dict['Interest Expense'][-1] / current_debt #interest expense not listed on Nasdaq
-    cost_equity = risk_free_rate + fin_dict['Beta'][-1] * (expected_return - risk_free_rate)
+    beta = fin_dict['Summary Data']['Beta']
+    rd = fin_dict['Income Statement']['Interest Expense'][-1] / current_debt #interest expense not listed on Nasdaq
+    cost_equity = risk_free_rate + beta * (expected_return - risk_free_rate)
     WACC_val = (current_equity/total_d_e) * cost_equity + (current_debt/ total_d_e) * rd* (1 - tax_rate) #rd not pulled yet
     return WACC_val
 
@@ -90,13 +90,13 @@ def NWC(fin_dict):
     The function returns the nwc
     '''
     nwc_list = []
-    for i in range(len(fin_dict['Total Current Assets'])):
-        nwc_value = fin_dict['Total Current Assets'][i] - fin_dict['Total Current Liabilities'][i]
+    for i in range(len(fin_dict['Balance Sheet']['Total Current Assets'])):
+        nwc_value = fin_dict['Balance Sheet']['Total Current Assets'][i] - fin_dict['Balance Sheet']['Total Current Liabilities'][i]
         nwc_list.append(nwc_value)
     return nwc_list
 
 def dcf_feasibility(fin_dict):
-    value_lst = fin_dict['Total Revenue']
+    value_lst = fin_dict['Income Statement']['Total Revenue']
     assert len(value_lst) >= 3, 'Not enough years to create a meaningful DCF'
     test = list(set(value_lst))
     assert len(test) > 1 and test[0] != 0, 'Not enough information to create a meaningful DCF'
@@ -111,13 +111,13 @@ def find_slope_intercept(fin_dict):
     '''
     slope_int_lst = []
     dcf_feasibility(fin_dict)
-    slope_int_lst.append(linear_regression(fin_dict['Total Revenue']))
-    slope_int_lst.append(linear_regression(fin_dict['Cost of Revenue']))
-    slope_int_lst.append(linear_regression(fin_dict['Sales, General and Admin.']))
-    slope_int_lst.append(linear_regression(fin_dict['Depreciation']))
+    slope_int_lst.append(linear_regression(fin_dict['Income Statement']['Total Revenue']))
+    slope_int_lst.append(linear_regression(fin_dict['Income Statement']['Cost of Revenue']))
+    slope_int_lst.append(linear_regression(fin_dict['Income Statement']['Sales, General and Admin.']))
+    slope_int_lst.append(linear_regression(fin_dict['Cash Flow']['Depreciation']))
     nwc_list = NWC(fin_dict)
     slope_int_lst.append(linear_regression(nwc_list))
-    slope_int_lst.append(linear_regression(fin_dict['Capital Expenditures']))
+    slope_int_lst.append(linear_regression(fin_dict['Cash Flow']['Capital Expenditures']))
     return slope_int_lst, nwc_list[-1] 
 
 def get_financial_values(future_year, slope_int_lst, tax_rate, past_nwc):
@@ -175,12 +175,12 @@ def dcf_calculator(fin_dict, expected_return, growth_rate=0.0124):
     risk_free_rate = 0.0238 #10 year U.S. Treasury Bond
     pvfcf = 0
     WACC_val = WACC(fin_dict, expected_return)
-    last_date = fin_dict['date'][-1]
+    last_date = fin_dict['Dates'][-1]
     last_date = int(last_date)
     year_lst = []
 
-    current_year_index = len(fin_dict['date']) - 1
-    current_debt = fin_dict['Long-Term Debt'][-1] + fin_dict['Short-Term Debt'][-1]
+    current_year_index = len(fin_dict['Dates']) - 1
+    current_debt = fin_dict['Balance Sheet']['Long-Term Debt'][-1] + fin_dict['Balance Sheet']['Short-Term Debt'][-1]
     financial_table = []
     slope_int_lst, past_nwc = find_slope_intercept(fin_dict)
     preferred_stock = 0
@@ -201,15 +201,10 @@ def dcf_calculator(fin_dict, expected_return, growth_rate=0.0124):
     pvtv = terminal_value / ((1 + WACC_val) ** year)    
     enterprise_value = pvfcf + pvtv
 
-    cash = fin_dict['Cash and Cash Equivalents'][-1]
-    minor_interest = fin_dict['Minority Interest'][-1]
+    cash = fin_dict['Balance Sheet']['Cash and Cash Equivalents'][-1]
+    minor_interest = fin_dict['Balance Sheet']['Minority Interest'][-1]
     equity_value = enterprise_value - current_debt - preferred_stock - minor_interest + cash 
-    price_per_share = equity_value / fin_dict['Share Volume'][0] 
+    number_of_shares = fin_dict['Summary Data']['Market cap'] / fin_dict['Summary Data']['Previous Close']
+    price_per_share = equity_value / number_of_shares 
 
     return price_per_share, financial_table, year_lst
-
-#WC = curent assets - total current_liabilities
-#NWC = 2016 WC - 2015 WC
-#growth rate = inbetween inflation and GDP
-
-#fin_statement.filter(line_item='Interest Expense')
