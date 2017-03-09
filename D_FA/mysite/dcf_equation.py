@@ -22,22 +22,28 @@ def linear_regression(year_value_lst):
     '''
     x_bar = sum(range(len(year_value_lst)))/len(year_value_lst)
     y_bar = sum(year_value_lst)/len(year_value_lst)
+    sum_xy = 0
     sum_x_squared = 0
-    sum_x_times_y = 0
     count = 0 #counts for 0s
     potential_error = False
     for i in range(len(year_value_lst)):
         x_difference = i - x_bar
         if year_value_lst[i] == 0:
             count += 1
-        y_difference = year_value_lst[i] - y_bar
-        x_difference_squared = (x_difference) ** 2
-        x_dif_y_dif = x_difference * y_difference
-        sum_x_squared += x_difference_squared
-        sum_x_times_y += x_dif_y_dif
+        xy = i * year_value_lst[i]
+        sum_xy += xy
+        x_squared = i ** 2
+        sum_x_squared += x_squared
+    mean_xy = sum_xy / len(year_value_lst)
+    mean_x_squared = sum_x_squared / len(year_value_lst)
+
+        #y_difference = year_value_lst[i] - y_bar
+        #x_difference_squared = (x_difference) ** 2
+        #x_dif_y_dif = x_difference * y_difference
     if count > 0 and count < len(year_value_lst):
         potential_error = True
-    slope = sum_x_times_y / sum_x_squared
+    #slope = sum_x_times_y / sum_x_squared
+    slope = (x_bar * y_bar - mean_xy) / ((x_bar ** 2) - mean_x_squared)
     y_int = y_bar - slope * x_bar
     return slope, y_int, potential_error
 
