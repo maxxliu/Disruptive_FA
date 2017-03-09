@@ -182,12 +182,13 @@ def advanced_search(sect, indust, mc):
 
 	elif sect != "None" and indust == "None":
 		pre = Stock.objects.filter(sector = sect)
+		
 		if mc != "None":
 			mid = []
 			for obj in pre:
 				current = Summary_Data.objects.get(ticker = obj)
 				if mc != "10B":
-					if mc_dict[mc][0] < current.market_cap <=mc_dict[mc][1]:
+					if mc_dict[mc][0] < current.market_cap <= mc_dict[mc][1]:
 						mid.append(obj)
 				else:
 					if current.market_cap > 10000000000:
@@ -205,9 +206,36 @@ def advanced_search(sect, indust, mc):
 
 			return fin
 
-	else:
+	elif sect == "None" and indust != "None":
+		pre = Stock.objects.filter(industry = indust)
+
+		if mc != "None":
+			mid = []
+			for obj in pre:
+				current = Summary_Data.objects.get(ticker = obj)
+				if mc != "10B":
+					if mc_dict[mc][0] < current.market_cap <= mc_dict[mc][1]:
+						mid.append(obj)
+				else:
+					if current.market_cap > 10000000000:
+						mid.append(obj)
+			fin = []
+			for obj in mid:
+				fin.append([obj.ticker, obj.name])
+
+			return fin
+
+		else:
+			fin = []
+			for obj in pre:
+				fin.append([obj.ticker, obj.name])
+
+			return fin
+
+	elif sect == "None" and indust == "None" and mc != "None":
 		if mc != "10B":
-			pre = Summary_Data.objects.filter(mc_dict[mc][0] < market_cap <= mc_dict[mc][1])
+			# pre = Summary_Data.objects.filter(market_cap > mc_dict[mc][0])
+			pre = Summary_Data.objects.filter(market_cap__range = (mc_dict[mc][0], mc_dict[mc][1]))
 
 			fin = []
 			for obj in pre:
@@ -216,13 +244,16 @@ def advanced_search(sect, indust, mc):
 			return fin
 
 		else:
-			pre = Summary_Data.objects.filter(market_cap > 10000000000)
+			pre = Summary_Data.objects.filter(market_cap__range = (10000000000, 10000000000000))
 
 			fin = []
 			for obj in pre:
 				fin.append([obj.ticker.ticker, obj.ticker.name])
 
 			return fin
+
+	else:
+		return ["None"]
 
 
 def update_summary_data(stock_ticker):

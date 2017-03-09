@@ -64,13 +64,24 @@ def results(request):
 		{'sector': SECTORS,
 		'industry': INDUSTRY})
 
+
 def advanced(request):
-	if request.method == "POST":
+	if request.method == "POST":			
 		sect = request.POST['Sector']
 		indust = request.POST['Industry']
 		mc = request.POST['Market Cap']
 
 		fin = advanced_search(sect, indust, mc)
 
-		return render(request, 'quick_search/advanced.html',
-			{'recommended': fin})
+		if fin == ["None"]:
+			return render(request, 'quick_search/stock_search.html', 
+				{'sector': SECTORS,
+				'industry': INDUSTRY})
+			
+
+		elif not fin:
+			return render(request, 'quick_search/error.html')
+
+		else:
+			return render(request, 'quick_search/advanced.html',
+				{'recommended': fin})

@@ -16,32 +16,34 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-			<td>Question 1</td>
-				<td>
-					<input type="radio" name="risk1" value="1"> Strongly Disagree&ensp;&ensp;&ensp;&ensp;
-					<input type="radio" name="risk1" value="2"> Disagree&ensp;&ensp;&ensp;&ensp;
-					<input type="radio" name="risk1" value="3" checked="checked"> Neutral&ensp;&ensp;&ensp;&ensp;
-					<input type="radio" name="risk1" value="4"> Agree&ensp;&ensp;&ensp;&ensp;
-					<input type="radio" name="risk1" value="5"> Strongly Agree
-				</td>
-			</tr>
-			<tr>
-				<td>Question 2</td>
-				<td>
-					<input type="radio" name="risk2" value="1"> Strongly Disagree&ensp;&ensp;&ensp;&ensp;
-					<input type="radio" name="risk2" value="2"> Disagree&ensp;&ensp;&ensp;&ensp;
-					<input type="radio" name="risk2" value="3" checked="checked"> Neutral&ensp;&ensp;&ensp;&ensp;
-					<input type="radio" name="risk2" value="4"> Agree&ensp;&ensp;&ensp;&ensp;
-					<input type="radio" name="risk2" value="5"> Strongly Agree
-				</td>
-			</tr>
+			{% for line in questions %}
+				<tr>
+					<td width=40%>{{line.1}}</td>
+					{% if line.2 == 1 %}
+					<td>
+						<input type="radio" name="{{line.0}}" value="-0.005"> Strongly Disagree&ensp;&ensp;&ensp;&ensp;
+						<input type="radio" name="{{line.0}}" value="-0.0025"> Disagree&ensp;&ensp;&ensp;&ensp;
+						<input type="radio" name="{{line.0}}" value="0" checked="checked"> Neutral&ensp;&ensp;&ensp;&ensp;
+						<input type="radio" name="{{line.0}}" value="0.0025"> Agree&ensp;&ensp;&ensp;&ensp;
+						<input type="radio" name="{{line.0}}" value="0.005"> Strongly Agree
+					</td>
+					{% else %}
+					<td>
+						<input type="radio" name="{{line.0}}" value="0.005"> Strongly Disagree&ensp;&ensp;&ensp;&ensp;
+						<input type="radio" name="{{line.0}}" value="0.0025"> Disagree&ensp;&ensp;&ensp;&ensp;
+						<input type="radio" name="{{line.0}}" value="0" checked="checked"> Neutral&ensp;&ensp;&ensp;&ensp;
+						<input type="radio" name="{{line.0}}" value="-0.0025"> Agree&ensp;&ensp;&ensp;&ensp;
+						<input type="radio" name="{{line.0}}" value="-0.005"> Strongly Agree
+					</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
 		</tbody>
 	</table>
 
 <p>&nbsp;</p>
 
-	<input type="submit" value="Calculate">
+	<p align="center"><input type="submit" value="Calculate"></p>
 </form>
 
 

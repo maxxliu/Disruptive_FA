@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .get_lsts import SECTORS, INDUSTRY
+from .survey import *
 
 # Create your views here.
 def index(request):
@@ -13,7 +14,10 @@ def stock_search(request):
 
 
 def risk_survey(request):
-	return render(request, 'risk_survey/risk_survey.html')
+	question_list = get_questions()
+
+	return render(request, 'risk_survey/risk_survey.html',
+		{'questions': question_list})
 
 
 def info(request):
