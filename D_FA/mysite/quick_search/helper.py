@@ -22,7 +22,6 @@ def get_recommended(stock, summary):
     mid = []
     for obj in pre:
         current = Summary_Data.objects.get(ticker = obj)
-        # if 0.5*summary.market_cap <= current.market_cap <= 1.5*summary.market_cap:
         diff = abs(current.market_cap - summary.market_cap)         
         if current.ticker.ticker != stock.ticker:
             if '&#39;' in current.ticker.name:
