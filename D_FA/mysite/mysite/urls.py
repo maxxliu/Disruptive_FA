@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from .one_time import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -23,3 +24,5 @@ urlpatterns = [
     url(r'^stock_search/', include('quick_search.urls')),
     url(r'^risk_survey/', include('risk_survey.urls'))
 ]
+
+starter()
