@@ -136,9 +136,13 @@ def NWC(fin_dict):
 
 def dcf_feasibility(fin_dict):
     value_lst = fin_dict['Income Statement']['Total Revenue']
-    assert len(value_lst) >= 3, 'Not enough years to create a meaningful DCF'
+    if len(value_lst) <= 3:
+        return True
+    # assert len(value_lst) >= 3, 'Not enough years to create a meaningful DCF'
     test = list(set(value_lst))
-    assert len(test) > 1 and test[0] != 0, 'Not enough information to create a meaningful DCF'
+    if len(test) < 1 or test[0] == 0:
+        return True
+    # assert len(test) > 1 and test[0] != 0, 'Not enough information to create a meaningful DCF'
 
 
 
@@ -207,6 +211,11 @@ def dcf_calculator(fin_dict, expected_return, growth_rate=0.0124):
     last_date = int(last_date)
     year_lst = []
 
+    inaccurate = False
+    inaccurate = dcf_feasibility(fin_dict)
+    if inaccurate:
+        return None, None, None, True, None
+        
     current_year_index = len(fin_dict['Dates']) - 1
     current_debt = fin_dict['Balance Sheet']['Long-Term Debt'][-1] + fin_dict['Balance Sheet']['Short-Term Debt / Current Portion of Long-Term Debt'][-1]
     financial_table = []
@@ -235,5 +244,10 @@ def dcf_calculator(fin_dict, expected_return, growth_rate=0.0124):
     number_of_shares = fin_dict['Summary Data']['market cap'] / fin_dict['Summary Data']['previous close']
     price_per_share = equity_value / number_of_shares 
 
-    return price_per_share, financial_table, year_lst
+    if price_per_share > fin_dict['Summary Data']['previous close']:
+        rating = 'BUY'
+    else:
+        rating = 'SELL'
+
+    return price_per_share, financial_table, year_lst, inaccurate, rating 
 
