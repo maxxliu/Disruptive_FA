@@ -21,7 +21,9 @@ def results(request):
 	elif request.method == "GET":
 		search = request.GET['textfield']
 
-	if search:
+	if search == "DFA":
+		return render(request, 'quick_search/dfa.html')
+	elif search:
 		try:
 			stock = Stock.objects.get(ticker = search)
 			update_summary_data(stock.ticker)

@@ -122,7 +122,7 @@ def WACC(fin_dict, expected_return):
     '''
     Calculates the weighted average cost of capital
     '''
-    risk_free_rate = 0.0246
+    risk_free_rate = 0.02587
     tax_rate = 0.35
     current_debt = fin_dict['Balance Sheet']['Long-Term Debt'][-1] + fin_dict['Balance Sheet']['Short-Term Debt / Current Portion of Long-Term Debt'][-1]
     current_equity = fin_dict['Balance Sheet']['Total Equity'][-1]
@@ -234,7 +234,7 @@ def dcf_calculator(fin_dict, expected_return, growth_rate=0.0124):
     Takes a nested dictionary and risk factor and returns price per share
     '''
     tax_rate = 0.35
-    risk_free_rate = 0.0238 #10 year U.S. Treasury Bond
+    risk_free_rate = 0.02587 #10 year U.S. Treasury Bond
     pvfcf = 0
     WACC_val = WACC(fin_dict, expected_return)
     last_date = fin_dict['Dates'][-1][-4:]
