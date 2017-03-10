@@ -1,5 +1,14 @@
 import pandas as pd
 
+def partial(func, *args, **keywords): #this is a curry function that will be used to get y value from the linear regression line
+    def newfunc(*fargs, **fkeywords):
+        newkeywords = keywords.copy()
+        newkeywords.update(fkeywords)
+        return func(*(args + fargs), **newkeywords)
+    newfunc.func = func
+    newfunc.args = args
+    newfunc.keywords = keywords
+    return newfunc
 
 def get_current_ebit(fin_dict):
     revenue = fin_dict['Income Statement']['Total Revenue'][-1]
@@ -14,6 +23,8 @@ def get_rd(fin_dict):
     market_cap = fin_dict['Summary Data']['market cap']
     ebit = get_current_ebit(fin_dict)
     interest_expense = fin_dict['Income Statement']['Interest Expense'][-1]
+    if interest_expense == 0: #accounts for dividing by 0
+        return credit_rating_values[0]
     icr = ebit / interest_expense
     value = -1
     if market_cap > 5000000000:
@@ -154,18 +165,37 @@ def find_slope_intercept(fin_dict):
     linear regression line.  This function returns a list of tuples where each tuple is a slope
     and its corresponding y intercept.  It also returns the current nwc
     '''
-    slope_int_lst = []
+    curry_error_lst = []
     dcf_feasibility(fin_dict)
-    slope_int_lst.append(linear_regression(fin_dict['Income Statement']['Total Revenue']))
-    slope_int_lst.append(linear_regression(fin_dict['Income Statement']['Cost of Revenue']))
-    slope_int_lst.append(linear_regression(fin_dict['Income Statement']['Sales, General and Admin.']))
-    slope_int_lst.append(linear_regression(fin_dict['Cash Flow']['Depreciation']))
-    nwc_list = NWC(fin_dict)
-    slope_int_lst.append(linear_regression(nwc_list))
-    slope_int_lst.append(linear_regression(fin_dict['Cash Flow']['Capital Expenditures']))
-    return slope_int_lst, nwc_list[-1] 
 
-def get_financial_values(future_year, slope_int_lst, tax_rate, past_nwc):
+    s, y, p_error = linear_regression(fin_dict['Income Statement']['Total Revenue'])
+    curry = partial(get_values, slope = s, y_int = y)
+    curry_error_lst.append((curry, p_error))
+
+    s, y, p_error = linear_regression(fin_dict['Income Statement']['Cost of Revenue'])
+    curry = partial(get_values, slope = s, y_int = y)
+    curry_error_lst.append((curry, p_error))
+
+    s, y, p_error = linear_regression(fin_dict['Income Statement']['Sales, General and Admin.'])
+    curry = partial(get_values, slope = s, y_int = y)
+    curry_error_lst.append((curry, p_error))
+
+    s, y, p_error = linear_regression(fin_dict['Cash Flow']['Depreciation'])
+    curry = partial(get_values, slope = s, y_int = y)
+    curry_error_lst.append((curry, p_error))
+
+    nwc_list = NWC(fin_dict)
+    s, y, p_error = linear_regression(nwc_list)
+    curry = partial(get_values, slope = s, y_int = y)
+    curry_error_lst.append((curry, p_error))
+
+    s, y, p_error = linear_regression(fin_dict['Cash Flow']['Capital Expenditures'])
+    curry = partial(get_values, slope = s, y_int = y)
+    curry_error_lst.append((curry, p_error))
+    return curry_error_lst, nwc_list[-1]
+
+
+def get_financial_values(future_year, curry_error_lst, tax_rate, past_nwc):
     '''
     This function takes in the future year, the list of slopes and y intercepts, the tax rate, and the past 
     nwc (will be used to calculate delta nwc).  It saves total revenue, cost of revenue, gross profit, sga,
@@ -173,16 +203,16 @@ def get_financial_values(future_year, slope_int_lst, tax_rate, past_nwc):
     This function finally returns this financial value list and the future year's nwc. 
     '''
     financial_val_lst = []
-    total_revenue = get_values(slope_int_lst[0][0], slope_int_lst[0][1], future_year)
-    cost_of_revenue = get_values(slope_int_lst[1][0], slope_int_lst[1][1], future_year)
+    total_revenue = curry_error_lst[0][0](year=future_year)
+    cost_of_revenue = curry_error_lst[1][0](year=future_year)
     gross_profit = total_revenue - cost_of_revenue
-    sga = get_values(slope_int_lst[2][0], slope_int_lst[2][1], future_year)
+    sga = curry_error_lst[2][0](year=future_year)
     ebitda = gross_profit - sga
-    depreciation = get_values(slope_int_lst[3][0], slope_int_lst[3][1], future_year)
+    depreciation = curry_error_lst[3][0](year=future_year)
     ebit = ebitda - depreciation
-    nwc = get_values(slope_int_lst[4][0], slope_int_lst[4][1], future_year)
+    nwc = curry_error_lst[4][0](year=future_year)
     delta_nwc = nwc - past_nwc
-    capex = get_values(slope_int_lst[5][0], slope_int_lst[5][1], future_year)
+    capex = curry_error_lst[5][0](year=future_year)
     fcf = ebit * (1 - tax_rate) + depreciation - delta_nwc + capex
 
     financial_val_lst += [total_revenue] + [cost_of_revenue] + [gross_profit] + [sga] + [ebitda] + [depreciation] + [ebit] + [delta_nwc] + [capex] + [fcf] 
