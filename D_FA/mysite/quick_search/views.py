@@ -4,6 +4,7 @@ from .models import *
 from .helper import *
 from .dcf_equation import *
 from risk_survey.models import *
+from decimal import *
 from .get_lsts import SECTORS, INDUSTRY
 from django.core.exceptions import *
 
@@ -28,7 +29,6 @@ def results(request):
 			try:
 				summary_data = Summary_Data.objects.get(ticker = stock)
 				header_list = format_header(stock, summary_data)
-
 				recommended = get_recommended(stock, summary_data)
 
 			except Summary_Data.DoesNotExist:
@@ -37,14 +37,19 @@ def results(request):
 			try:
 				data_date = Data_Date.objects.get(ticker = stock)
 				date_list = format_dates(data_date)
-				# check for update on fin statemenet values
 
 				fin_statements = Fin_Statement.objects.filter(ticker = stock)
 				fin_table_list = format_fin_statements(fin_statements)
 
 				dcf_dict = create_dict(stock.ticker)
 				r_m = float(str(rm.objects.get(rm_id = 1).risk))
-				price, growth, years = dcf_calculator(dcf_dict, r_m)
+				price, growth, years, inaccurate, rating = dcf_calculator(dcf_dict, r_m)
+
+				if not inaccurate:				
+					if round(price, 2) < 0:
+						price = '-$' + str(abs(round(price, 2)))
+					else:
+						price = '$' + str(round(price, 2))
 
 			except Data_Date.DoesNotExist:
 				return render(request, 'quick_search/results.html',
@@ -60,9 +65,9 @@ def results(request):
 				'dates': date_list,
 				'fin_statements': fin_table_list,
 				'error': [],
-				'dcf': ['$' + str(round(price, 2))],
-				'recommended': recommended
-				})		
+				'dcf': [price, growth, years, inaccurate, rating],
+				'recommended': recommended})
+
 		except Stock.DoesNotExist:
 			return render(request, 'quick_search/error.html')
 	else:
@@ -91,3 +96,15 @@ def advanced(request):
 		else:
 			return render(request, 'quick_search/advanced.html',
 				{'recommended': fin})
+
+
+def thanks(request):
+	if request.method == "POST":
+		agree = Decimal(request.POST['agree'])
+		r_m = rm.objects.get(rm_id = 1)
+		r_m.risk += agree
+		r_m.save()
+
+		return render(request, 'quick_search/thanks.html')
+
+

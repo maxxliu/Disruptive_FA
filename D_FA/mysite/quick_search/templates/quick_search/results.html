@@ -38,20 +38,47 @@
 	  </tbody>
 	</table>
 </div>
-
+	
 <p>&nbsp;</p>
+
 	{% if error %}
 		{% for line in error %}
-			<p>{{line}}</p>
+			<h3>{{line}}</h3>
 		{% endfor %}
 	{% endif %}
 
 <p>&nbsp;</p>
 
 {% if dcf %}
-	{% for line in dcf %}
-		<h3>Projected Price: {{line}}</h3>
-	{% endfor %}
+	{% if dcf.3 == True %}
+		<h3>Sorry, it seems like we don't have enough information for this stock. Please take a look at our list of recommended stocks.</h3>
+	{% else %}
+		<h3>Projected Price: {{dcf.0}} &nbsp;&nbsp;&nbsp;&nbsp; {{dcf.4}}</h3>
+
+		<p>&nbsp;</p>
+
+		<h3>Do you agree with our assessment?</h3>
+
+		<table>
+			<tbody>
+				<tr>
+					<form method="POST" action="/stock_search/thanks/">
+					{% csrf_token %}
+						{% if dcf.4 == "BUY" %}
+						<td><input type="radio" name="agree" value="0" checked> Agree&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td><input type="radio" name="agree" value="0.0025"> Hold&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td><input type="radio" name="agree" value="0.005"> Sell&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						{% else %}
+						<td><input type="radio" name="agree" value="0" checked> Agree&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td><input type="radio" name="agree" value="-0.0025"> Hold&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td><input type="radio" name="agree" value="-0.005"> Buy&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						{% endif %}
+						<td><input type="submit" value="Submit"></td>
+					</form>
+				</tr>
+			</tbody>
+		</table>
+	{% endif %}
 {% endif %}
 
 <p>&nbsp;</p>
@@ -77,7 +104,5 @@
 	</div>
 
 <p>&nbsp;</p>
-
-{% include "home/includes/snippet.html" %}
 
 {% endblock %}
