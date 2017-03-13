@@ -1,3 +1,6 @@
+# url patterns for the quick search app include the index page, results page, 
+# advanced search results page, and the thanks page
+
 from django.conf.urls import url, include
 from . import views
 

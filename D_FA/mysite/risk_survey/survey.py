@@ -1,3 +1,5 @@
+# Questions and get question function for risk survey app
+
 import numpy as np 
 
 QUESTIONS = {
@@ -33,6 +35,15 @@ QUESTIONS = {
 	29: ("You would choose life saving surgery with a low chance of survival to cure a terminal disease leaving you with a year to live.", 1)}
 
 def get_questions():
+	'''
+	Gets a list of 5 questions randomly chosen from the QUESTIONS list
+
+	Inputs:
+		none, just the global QUESTIONS list
+
+	Returns:
+		fin: list of 5 tuples of question and positive or negative risk score
+	'''
 	question_list = []
 	for item in np.random.choice(range(30), 5, replace=False):
 		question_list.append(QUESTIONS[item])

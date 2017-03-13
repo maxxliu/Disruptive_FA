@@ -1,3 +1,7 @@
+# url patterns for the home app include info page, step_1 page, step_2 page, 
+# step_3 page, step_4 page, step_5 page, step_6 page, step_7 page, step_8 
+# page, stock_search page, and the risk_survey page
+
 from django.conf.urls import url, include
 from . import views
 

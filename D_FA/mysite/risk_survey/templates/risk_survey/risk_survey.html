@@ -1,3 +1,5 @@
+<!-- template fore the risk survey page -->
+
 {% extends "home/header.html" %}
 
 {% block content %}
@@ -6,6 +8,7 @@
 
 <p>&nbsp;</p>
 
+<!-- form for the risk assessment survey -->
 <form method="POST" action="/risk_survey/scored/">
 	{% csrf_token %}
 	<table class="table table-fixed">
@@ -46,6 +49,7 @@
 	<p align="center"><input type="submit" value="Calculate"></p>
 </form>
 
+<!-- form to reset the risk score -->
 <form method="POST" action="/risk_survey/reset/">
 	{% csrf_token %}
 	<p align="center"><button type="submit">Reset Risk Score</button></p>

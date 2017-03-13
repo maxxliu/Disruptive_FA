@@ -1,3 +1,6 @@
+# url patterns for the risk survey app include index page, scored page, and 
+# reset page
+
 from django.conf.urls import url, include
 from . import views
 

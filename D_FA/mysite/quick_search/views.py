@@ -10,12 +10,32 @@ from django.core.exceptions import *
 
 # Create your views here.
 def index(request):
+	'''
+	Function to render the index stock search page
+
+	Inputs:
+		request: a request to the page
+
+	Returns:
+		render: html template of the stock search page with sector and 
+		industry lists stored in a dictionary
+	'''
 	return render(request, 'quick_search/stock_search.html', 
 		{'sector': SECTORS,
 		'industry': INDUSTRY})
 
 
 def results(request):
+	'''
+	Function to render the search results page of the stock search app
+
+	Inputs:
+		request: either get or post which is a stock ticker
+
+	Results:
+		render: html template of the results page with stock parameters stored 
+		in a dictionary
+	'''
 	if request.method == "POST":
 		search = request.POST['textfield'].upper()
 	elif request.method == "GET":
@@ -45,7 +65,8 @@ def results(request):
 
 				dcf_dict = create_dict(stock.ticker)
 				r_m = float(str(rm.objects.get(rm_id = 1).risk))
-				price, growth, years, inaccurate, rating = dcf_calculator(dcf_dict, r_m)
+				price, growth, years, inaccurate, rating = \
+					dcf_calculator(dcf_dict, r_m)
 
 				if not inaccurate:				
 					if round(price, 2) < 0:
@@ -58,7 +79,9 @@ def results(request):
 					{'header': header_list,
 					'dates': ['n/a', 'n/a', 'n/a', 'n/a'],
 					'fin_statements': [['n/a', 'n/a', 'n/a', 'n/a', 'n/a']],
-					'error': ["Sorry, it seems like we don't have enough information for this stock. Please take a look at our list of recommended stocks."],
+					'error': ["Sorry, it seems like we don't have enough" + 
+						" information for this stock. Please take a look at" + 
+						" our list of recommended stocks."],
 					'dcf': [],
 					'recommended': recommended})
 
@@ -79,6 +102,17 @@ def results(request):
 
 
 def advanced(request):
+	'''
+	Function to render the advanced search results page
+
+	Inputs:
+		request: a post request that specifies queries sector, industry, or 
+		market cap
+
+	Returns:
+		render: html template of the advanced search page with the list of 
+		recommended stocks stored in a dictionary
+	'''
 	if request.method == "POST":			
 		sect = request.POST['Sector']
 		indust = request.POST['Industry']
@@ -101,6 +135,17 @@ def advanced(request):
 
 
 def thanks(request):
+	'''
+	Function to render the thanks page after agreeing/disagreeing with our 
+	stock rating and also updates the users rm score
+
+	Inputs:
+		request: a post request that specifies whether the user agrees/
+		diasgrees with our rating
+
+	Returns:
+		render: html template of the thanks page
+	'''
 	if request.method == "POST":
 		agree = Decimal(request.POST['agree'])
 		r_m = rm.objects.get(rm_id = 1)

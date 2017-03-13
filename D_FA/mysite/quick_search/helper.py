@@ -1,8 +1,8 @@
+# Helper functions for the quick_search views.py
+
 from .models import *
 from django.utils import timezone
 import data_gathering
-
-# Helper functions for the quick_search views.py
 
 def get_recommended(stock, summary):
     '''
@@ -145,6 +145,15 @@ def format_fin_statements(fin_statements):
 
 def advanced_search(sect, indust, mc):
     '''
+    Returns a list of recommended stocks based off of the entered parameters
+
+    Inputs:
+        sect: stock sector parameter
+        indust: stock industry parameter
+        mc: stock market cap parameter
+
+    Returns:
+        fin: a list of tuples of recommended stock ticker and name
     '''
     mc_dict = {
         "0": (0, 1000000),
@@ -257,7 +266,13 @@ def advanced_search(sect, indust, mc):
 
 def update_summary_data(stock_ticker):
     '''
-    updates summary data for stocks
+    Updates summary data for stocks
+
+    Inputs:
+        stock_ticker: stock ticker
+
+    Returns:
+        none, just updates summary data object
     '''
     stock_ticker = stock_ticker.upper()
     try:
@@ -280,7 +295,13 @@ def update_summary_data(stock_ticker):
 
 def fix_summary(summ_d):
     '''
-    fixes the summary dictionary if its formatting is inconsistent
+    Fixes the summary dictionary if its formatting is inconsistent
+
+    Inputs:
+        summ_d: dictionary of summary data attributes
+
+    Returns:
+        none, just fixes the formatting of the summary dictionary
     '''
     for key, value in summ_d.items():
         if value == '':
@@ -305,7 +326,13 @@ def fix_summary(summ_d):
 
 def create_dict(stock_ticker):
     '''
-    takes a ticker and gives dictionary of data fathered from db
+    Takes a ticker and gives dictionary of data fathered from db
+
+    Inputs:
+        stock_ticker: stock ticker
+
+    Returns:
+        fs_dict: returns diction of stock summary data
     '''
     s = Stock.objects.get(ticker=stock_ticker)
     fs = Fin_Statement.objects.filter(ticker=s)

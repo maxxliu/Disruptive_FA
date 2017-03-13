@@ -1,17 +1,16 @@
+<!-- template for the stock search page -->
+
 {% extends "home/header.html" %}
 
 {% block content %}
 
 <h2>Search for Your Stock of Interest</h2>
 
-{% for line in test %}
-	<p>{{line}}</p>
-{% endfor %}
-
 <p>&nbsp;</p>
 
 <h3>Stock Ticker</h3>
 
+<!-- form for entering stock ticker -->
 <form method="POST" action="/stock_search/results/">
 	{% csrf_token %}
 	<input type="text" name="textfield">
@@ -22,6 +21,7 @@
 
 <h3>Stock Parameters</h3>
 
+<!-- form to enter stock parameters to query -->
 <form method="POST" action="/stock_search/advanced/">
 	{% csrf_token %}
 		<table class="table table-fixed">

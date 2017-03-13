@@ -1,6 +1,18 @@
+# function to get list of sectors and industries
+
 import pandas as pd 
 
 def find_lists():
+	'''
+	Gets list of sectors and industries from NYSE.csv and NASDAQ.csv
+
+	Inputs:
+		none, just reads csv's
+
+	Returns:
+		final_sectors: list of sectors
+		final_industry: list of industries
+	'''
 	nyse = pd.read_csv('NYSE.csv')
 	nasdaq = pd.read_csv('NASDAQ.csv')
 

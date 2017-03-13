@@ -1,3 +1,5 @@
+<!-- template for teh results page -->
+
 {% extends "home/header.html" %}
 
 {% block content %}
@@ -6,9 +8,10 @@
 	</style>
 </head>
 
-	{% for line in header %}
-		<h3>{{line}}</h3>
-	{% endfor %}
+<!-- creates summary data header -->
+{% for line in header %}
+	<h3>{{line}}</h3>
+{% endfor %}
 
 <p>&nbsp;</p>
 
@@ -17,6 +20,7 @@
 
 <p>&nbsp;</p>
 
+<!-- scrollable table fore financial statements of queried stock -->
 <div id="" style="overflow-y:scroll; height:400px;">
 	<table class="table table-fixed">
 	  <thead>
@@ -41,14 +45,17 @@
 	
 <p>&nbsp;</p>
 
-	{% if error %}
-		{% for line in error %}
-			<h3>{{line}}</h3>
-		{% endfor %}
-	{% endif %}
+
+<!-- error message if not enough information on queried stock -->
+{% if error %}
+	{% for line in error %}
+		<h3>{{line}}</h3>
+	{% endfor %}
+{% endif %}
 
 <p>&nbsp;</p>
 
+<!-- DCF header for queried stock as well as form to agree/disagree with rating -->
 {% if dcf %}
 	{% if dcf.3 == True %}
 		<h3>Sorry, it seems like we don't have enough information for this stock. Please take a look at our list of recommended stocks.</h3>
@@ -83,25 +90,26 @@
 
 <p>&nbsp;</p>
 
-	<div class="panel panel-default">
-	<div class="panel-heading text-center"><b>Recommended</b></div>
-	<table class="table">
+<!-- table of recommended stocks and links to their results pages -->
+<div class="panel panel-default">
+<div class="panel-heading text-center"><b>Recommended</b></div>
+<table class="table">
+		<tr>
+			<th>Company Name</th>
+			<th>Link to Results</th>
+		</tr>
+		{% for line in recommended %}
 			<tr>
-				<th>Company Name</th>
-				<th>Link to Results</th>
+				<td>{{line.1}}</td>
+				<td>
+					<form action="/stock_search/results/" method="GET"/>
+					<input type="submit" name="textfield" value={{line.0}}>
+					</form>
+				</td>
 			</tr>
-			{% for line in recommended %}
-				<tr>
-					<td>{{line.1}}</td>
-					<td>
-						<form action="/stock_search/results/" method="GET"/>
-						<input type="submit" name="textfield" value={{line.0}}>
-						</form>
-					</td>
-				</tr>
-			{% endfor %}
-	</table>
-	</div>
+		{% endfor %}
+</table>
+</div>
 
 <p>&nbsp;</p>
 
