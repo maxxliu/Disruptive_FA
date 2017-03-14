@@ -1,6 +1,19 @@
+# CS122
+# DFA
+# Max Liu
+
 import pandas as pd 
 
 def find_lists():
+	'''
+	creates a list of the possible indsutries and sectors 
+
+	inputs:
+		None
+
+	Returns:
+		a list of all possible industries and sectors
+	'''
 	nyse = pd.read_csv('NYSE.csv')
 	nasdaq = pd.read_csv('NASDAQ.csv')
 

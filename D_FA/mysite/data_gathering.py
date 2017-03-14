@@ -26,6 +26,12 @@ data = {"Period Ending": []
 def create_urls(ticker):
     '''
     create link to web page that holds data
+
+    Inputs:
+        ticker (string): stock ticker
+
+    Returns:
+        list of tuples with the statement type and url link
     '''
     url_p1 = "https://www.nasdaq.com/symbol/"
     url_p2 = "/financials?query="
@@ -35,12 +41,19 @@ def create_urls(ticker):
     b_s = rough_url + "balance-sheet"
     c_f = rough_url + "cash-flow"
 
-    return [("Income Statement", i_s), ("Balance Sheet", b_s), ("Cash Flow", c_f)]
+    return [("Income Statement", i_s), ("Balance Sheet", b_s), \
+            ("Cash Flow", c_f)]
 
 
 def clean_text(tr_tag):
     '''
     return clean list of data
+
+    Inputs:
+        tr_tag: a beautiful soup tag with data
+
+    Returns:
+        a list of the data gathered from the tag
     '''
     row_data = tr_tag.get_text()
     row_data = row_data.split('\n')
@@ -71,6 +84,12 @@ def clean_text(tr_tag):
 def get_dates(tr_tag):
     '''
     format and return period ending dates
+
+    Inputs:
+        tr_tag: a beautiful soup tag with data 
+
+    Returns:
+        a list of the dates that the financial data is from
     '''
     raw_str = tr_tag.get_text()
     raw_str = raw_str.split('\n')
@@ -89,6 +108,15 @@ def get_dates(tr_tag):
 
 
 def get_interest_expense(ticker):
+    '''
+    pulls interest expense data 
+
+    Inputs:
+        ticker (string): stock ticker
+
+    Returns:
+        a list of interest expense data from last 4 years
+    '''
     ticker = ticker.lower()
     url = 'http://www.marketwatch.com/investing/stock/{}/financials'.format(ticker)
     r = requests.get(url)
@@ -129,6 +157,12 @@ def get_interest_expense(ticker):
 def collect_fin_data(ticker):
     '''
     takes a ticker and collect financial data relating to the ticker
+
+    Inputs:
+        ticker (string): stock ticker
+
+    Returns:
+        a dictionary with financial data and a dictionary with dates
     '''
     ticker = ticker.lower()
     data_dict = OrderedDict()
@@ -180,6 +214,12 @@ def collect_fin_data(ticker):
 def summary_info(ticker):
     '''
     Takes a ticker and creates a dictionary of summary information
+
+    Inputs:
+        ticker (string): stock ticker
+
+    Returns:
+        a dictionary with summary data
     '''
     summary_d = {}
 
@@ -226,6 +266,12 @@ def summary_info(ticker):
 def create_csv(data_dict):
     '''
     convert dictionary into csv file
+
+    Inputs:
+        data_dict (dictionary): a dictionary of financial data 
+
+    Returns:
+        a csv file of data from financials dictionary
     '''
     data_lst = []
     for key, d in data_dict.items():
