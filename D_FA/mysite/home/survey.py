@@ -5,9 +5,9 @@ import numpy as np
 QUESTIONS = {
 	0: ("If you pay $100 to enter a lottery, you have a 20 percent chance of winning $500 and a 80 percent chance of making $0. Would you enter the lottery?", 1),
 	1: ("You are trying to ask your significant other to prom. Would you sing to him/her in a crowded area if it gave you a 75 percent chance of success versus a 50 percent chance of success if asking regularly?", 1),
-	2: ("If you were given $5000, would you invest it in a stock that has a 50 percent chance of doubling your money or a 50 percent chance of losing all your money?", 1),
+	2: ("If you were given $5000, would you invest it in a stock that has a 50 percent chance of doubling your money or a 50 percent chance of losing half your money?", 1),
 	3: ("If you were given $5000, would you invest it in a stock that has a 75 percent of doubling your money but a 25 percent of losing all your money?", 1),
-	4: ("Would you cheating on an exam to get an A? You have a 90 percent chance of not getting caught and a 10 percent chance of not getting caught and receiving a 0. You will get a C if you do not cheat.", 1),
+	4: ("Would you cheating on an exam to get an A? You have a 90 percent chance of not getting caught and a 10 percent chance of getting caught and receiving a 0. You will get a C if you do not cheat.", 1),
 	5: ("If your favorite biologically related person (e.g. parent, grandparent, aunty, uncle, brother, sister, cousin) gave you all their money to invest, would you invest in a stock that had a 60 percent chance of doubling money and a 40 percent chance of losing half the money?", 1),
 	6: ("Would you be happy with a 5 percent annual portfolio growth rate?", 1),
 	7: ("You associate the word “risk” with opportunity or thrill.", 1),

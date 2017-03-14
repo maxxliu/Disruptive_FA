@@ -1,6 +1,6 @@
 import pandas as pd
 
-def partial(func, *args, **keywords): #this is a curry function that will be used to get y value from the linear regression line
+def partial(func, *args, **keywords):
     '''
     This partial, currying function takes in another function, 
     and default arguments and returns a new function that 
@@ -49,7 +49,8 @@ def get_rd(fin_dict):
     It accesses this dictionary to get the company's interest expense.  
     It uses the helper function get_current_ebit
     to find a company's ebit.  
-    It then calculates the interest coverage ratio(icr) = ebit / interest_expense.
+    It then calculates the interest coverage 
+    ratio(icr) = ebit / interest_expense.
     Based on Aswath Damodaran's icr to credit rating estimation table, 
     it matches a company's icr to its credit rating 
     cost of debt score.  These values are in credit_rating_values where 
@@ -71,7 +72,7 @@ def get_rd(fin_dict):
     icr = ebit / interest_expense
     value = -1
     if market_cap > 5000000000: #for market cap greater than 5 B 
-        if icr >= 3: #makes searching for what icr range the icr value falls under.
+        if icr >= 3: #makes searching for what icr range is easier
             if icr < 6.5:
                 value = 2
             elif icr < 8.5:
