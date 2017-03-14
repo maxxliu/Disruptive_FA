@@ -90,7 +90,7 @@ def results(request):
 				'dates': date_list,
 				'fin_statements': fin_table_list,
 				'error': [],
-				'dcf': [price, growth, years, inaccurate, rating],
+				'dcf': [price, inaccurate, rating],
 				'recommended': recommended})
 
 		except Stock.DoesNotExist:
@@ -153,5 +153,3 @@ def thanks(request):
 		r_m.save()
 
 		return render(request, 'quick_search/thanks.html')
-
-

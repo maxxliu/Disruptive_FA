@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def partial(func, *args, **keywords): #this is a curry function that will be used to get y value from the linear regression line
     '''
     This partial, currying function takes in another function, and default arguments and returns a new function that 
@@ -19,6 +20,7 @@ def partial(func, *args, **keywords): #this is a curry function that will be use
     newfunc.args = args
     newfunc.keywords = keywords
     return newfunc
+
 
 def get_current_ebit(fin_dict):
     '''
@@ -88,8 +90,6 @@ def get_rd(fin_dict):
     return credit_rating_values[value]
 
 
-
-
 def linear_regression(year_value_lst):
     '''
     Takes in a list of financial values for a set number of years and
@@ -120,15 +120,12 @@ def linear_regression(year_value_lst):
     return slope, y_int, potential_error
 
 
-
-
 def get_values(slope, y_int, year):
     '''
     Takes in a slope, y-intercept, and a year represented as an index 
     and returns its expected year value
     '''
     return slope * year + y_int
-
 
 
 def WACC(fin_dict, expected_return):
@@ -149,6 +146,7 @@ def WACC(fin_dict, expected_return):
     WACC_val = (current_equity/total_d_e) * cost_equity + (current_debt/ total_d_e) * rd* (1 - tax_rate) #rd not pulled yet
     return WACC_val
 
+
 def NWC(fin_dict):
     '''
     Accesses a financial dictionary for totat assets and total Liabilities for a given year.  
@@ -161,6 +159,7 @@ def NWC(fin_dict):
         nwc_list.append(nwc_value)
     return nwc_list
 
+
 def dcf_feasibility(fin_dict):
     '''
     This helper function tests to see if there are less than 3 years worth of data, no data, and if revenue = 0. 
@@ -172,10 +171,6 @@ def dcf_feasibility(fin_dict):
     test = list(set(value_lst))
     if len(test) < 1 or test[0] == 0:
         return True
-
-
-
-
 
 
 def find_slope_intercept(fin_dict):
@@ -240,6 +235,7 @@ def get_financial_values(future_year, curry_error_lst, tax_rate, past_nwc):
 financial_term_lst = ['Total Revenue', 'Cost of Revenue', 'Gross Profit', 'SGA', 'EBITDA', 'Depreciation',
 'EBIT', 'Change in NWC', 'Capital Expenditures', 'FCF']
 
+
 def numbers_dataframe(financial_table, year_lst, financial_term_lst):
     df = pd.DataFrame(financial_table)
     df = df.transpose()
@@ -272,7 +268,6 @@ def dcf_calculator(fin_dict, expected_return, growth_rate=0.0124):
     financial_table = []
     slope_int_lst, past_nwc = find_slope_intercept(fin_dict)
     pvfcf = 0
-
     
     for year in range(1,6): #each year represents one of the 5 future years
         future_year = current_year_index + year

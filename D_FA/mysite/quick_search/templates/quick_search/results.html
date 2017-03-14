@@ -57,10 +57,10 @@
 
 <!-- DCF header for queried stock as well as form to agree/disagree with rating -->
 {% if dcf %}
-	{% if dcf.3 == True %}
+	{% if dcf.1 == True %}
 		<h3>Sorry, it seems like we don't have enough information for this stock. Please take a look at our list of recommended stocks.</h3>
 	{% else %}
-		<h3>Projected Price: {{dcf.0}} &nbsp;&nbsp;&nbsp;&nbsp; {{dcf.4}}</h3>
+		<h3>Projected Price: {{dcf.0}} &nbsp;&nbsp;&nbsp;&nbsp; {{dcf.2}}</h3>
 
 		<p>&nbsp;</p>
 
@@ -71,7 +71,7 @@
 				<tr>
 					<form method="POST" action="/stock_search/thanks/">
 					{% csrf_token %}
-						{% if dcf.4 == "BUY" %}
+						{% if dcf.2 == "BUY" %}
 						<td><input type="radio" name="agree" value="0" checked> Agree&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						<td><input type="radio" name="agree" value="0.0025"> Hold&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						<td><input type="radio" name="agree" value="0.005"> Sell&nbsp;&nbsp;&nbsp;&nbsp;</td>
