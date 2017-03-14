@@ -1,6 +1,7 @@
 #Creates database for a sample range of stocks
 #Sample will include the sp 500 (or all of NYSE/NASDAQ)
 #Max Liu
+#NOTHING IN THIS FILE WAS USED FOR THE FINAL PRODUCT
 
 
 import data_gathering
@@ -8,15 +9,11 @@ from collections import OrderedDict
 import sqlite3
 import csv
 
-'''
-I want to have 3 database tables
-
-1. stock financial information
-2. stock period ending information to decide when we need to update
-3. Additional information such as beta, share volume, share price, multiples/ratios, tax rate
-'''
 
 def fin_data_dict(list_of_tickers):
+    '''
+    creates dictionary for multiple tickers
+    '''
     stock_fin = OrderedDict()
     stock_dates = OrderedDict()
     for stock in list_of_tickers:
@@ -27,31 +24,16 @@ def fin_data_dict(list_of_tickers):
 
     return stock_fin, stock_dates
 
+
 def sum_info_dict(list_of_tickers):
+    '''
+    creates dictionary of summary data for multiple stocks
+    '''
     summary = {}
     for stock in list_of_tickers:
         summary[stock.upper()] = data_gathering.summary_info(stock)
 
     return summary
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def stock_list_csv(list_of_tickers):
@@ -85,13 +67,7 @@ def stock_list_csv(list_of_tickers):
 
 def init_sql_db(stock_fin_csv):
     '''
-    creates sqlite database that holds relevant financial tables
-
-    maybe import the data manually?
-
-    one of the tables we need:
-
-    CREATE TABLE stock_financials (ticker VARCHAR, statement_type VARCHAR, line_item VARCHAR, year_1 BIGINT, year_2 BIGINT, year_3 BIGINT, year_4 BIGINT);
+    create a sql database of financial data
     '''
     conn = sqlite3.connect("stock_data.db")
     c = conn.cursor()
